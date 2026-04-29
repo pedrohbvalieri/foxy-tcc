@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<title>Foxy 🦊 — Meu Perfil</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="profile">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+<div id="foxy-loader" role="status" aria-label="Carregando perfil…">
+  <div class="loader-logo">Foxy 🦊</div>
+  <div class="loader-imgs" aria-hidden="true">
+    <div class="loader-img a">🌸</div>
+    <div class="loader-img b">👤</div>
+  </div>
+  <p class="loader-text">Carregando seu perfil… 🌸</p>
+</div>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<nav class="nav" role="navigation" aria-label="Navegação principal">
+  <div class="nav-logo" onclick="showPage('dashboard')" role="link" tabindex="0">Foxy 🦊</div>
+  <div class="nav-actions">
+    <button class="nav-btn" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    <button class="nav-btn" onclick="goBack()" aria-label="Voltar">←</button>
+  </div>
+</nav>
+
+<main id="main-content" class="page-enter">
+  <div class="profile-wrap">
+
+    <!-- Header do Perfil -->
+    <div class="profile-header" role="region" aria-label="Informações do perfil">
+      <div class="profile-avatar nav-avatar" style="width:96px;height:96px;font-size:3rem;margin:0 auto 16px" aria-label="Avatar">🦊</div>
+      <h1 class="profile-name" aria-live="polite">Carregando…</h1>
+      <div id="profileComfortBadge" style="margin-top:8px;display:inline-block;padding:6px 18px;border-radius:99px;background:rgba(255,255,255,0.7);font-size:0.85rem;font-weight:700;color:var(--green-deep)">
+        🌱 Carregando…
+      </div>
+      <div class="profile-tags" id="profileInterestTags" aria-label="Interesses" aria-live="polite"></div>
+    </div>
+
+    <!-- Estatísticas -->
+    <div class="profile-stats" role="region" aria-label="Suas estatísticas">
+      <div class="stat-card">
+        <div class="stat-num" id="statSessions" aria-live="polite">—</div>
+        <div class="stat-label">Sessões</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statFriends" aria-live="polite">—</div>
+        <div class="stat-label">Amigos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statAchievements" aria-live="polite">—</div>
+        <div class="stat-label">Conquistas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="statStreak" aria-live="polite">—</div>
+        <div class="stat-label">Dias seguidos</div>
+      </div>
+    </div>
+
+    <!-- Nível de Conforto -->
+    <div class="card" style="margin-bottom:20px" role="region" aria-label="Nível de conforto social">
+      <h2 style="font-family:var(--font-title);font-weight:800;font-size:1rem;margin-bottom:16px">🌱 Nível de Conforto Social</h2>
+      <div style="display:flex;align-items:center;gap:16px">
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.82rem;color:var(--text2)">
+            <span>Conforto atual</span>
+            <span id="profileComfort" aria-live="polite">—</span>
+          </div>
+          <div class="progress-bar" role="progressbar" aria-label="Nível de conforto" id="comfortBar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress-fill" id="comfortFill" style="width:33%"></div>
+          </div>
+        </div>
+      </div>
+      <p style="color:var(--text3);font-size:0.8rem;margin-top:12px">Você pode atualizar seu nível nas configurações a qualquer momento.</p>
+    </div>
+
+    <!-- Conquistas Recentes -->
+    <div class="card" style="margin-bottom:20px" role="region" aria-label="Conquistas recentes">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <h2 style="font-family:var(--font-title);font-weight:800;font-size:1rem">🏆 Conquistas</h2>
+        <button class="btn btn-ghost btn-sm" onclick="showPage('achievements')" aria-label="Ver todas as conquistas">Ver todas →</button>
+      </div>
+      <div class="achievement-grid" id="profileAchievements" role="list" aria-label="Conquistas desbloqueadas"></div>
+    </div>
+
+    <!-- Amigos -->
+    <div class="card" style="margin-bottom:24px" role="region" aria-label="Seus amigos">
+      <h2 style="font-family:var(--font-title);font-weight:800;font-size:1rem;margin-bottom:16px">💚 Amigos</h2>
+      <div id="profileFriends" role="list">
+        <div class="friend-item" role="listitem">
+          <div class="friend-avatar" aria-hidden="true">🦊</div>
+          <div class="friend-info">
+            <div class="friend-name">Lucas</div>
+            <div class="friend-status">Jogando 🎮</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="showToast('Mensagem enviada! 💌','success')" aria-label="Enviar mensagem para Lucas">Mensagem</button>
+        </div>
+        <div class="friend-item" role="listitem">
+          <div class="friend-avatar" aria-hidden="true">🐢</div>
+          <div class="friend-info">
+            <div class="friend-name">Pedro</div>
+            <div class="friend-status">Online 💚</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="showToast('Mensagem enviada! 💌','success')" aria-label="Enviar mensagem para Pedro">Mensagem</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ações -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button class="btn btn-ghost btn-full" onclick="showPage('settings')" style="justify-content:flex-start">
+        ⚙️ Editar configurações
+      </button>
+      <button class="btn btn-ghost btn-full" onclick="showPage('safety')" style="justify-content:flex-start">
+        🛡️ Central de segurança
+      </button>
+      <button class="btn btn-ghost btn-full" onclick="logout()" style="justify-content:flex-start;color:var(--text3)">
+        🚪 Sair da conta
+      </button>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="app.js"></script>
+<script type="module">
+// Exibe conquistas no perfil
+const ACHIEVEMENTS = [
+  { emoji:"🤝", name:"Primeira Conexão",   desc:"1ª sessão!",     unlocked:true  },
+  { emoji:"📖", name:"Historiador Gentil", desc:"História completa", unlocked:true },
+  { emoji:"🌙", name:"Parceiro Calmo",     desc:"10 sessões quietas",unlocked:true },
+];
+const el = document.getElementById("profileAchievements");
+if (el) {
+  el.innerHTML = ACHIEVEMENTS.map(a => `
+    <div class="achievement" role="listitem" aria-label="${a.name}: ${a.desc}">
+      <span class="achievement-icon" aria-hidden="true">${a.emoji}</span>
+      <span class="achievement-name">${a.name}</span>
+      <span style="font-size:0.7rem;color:var(--text3);text-align:center">${a.desc}</span>
+    </div>`).join("");
+}
+
+// Atualiza barra de conforto ao carregar dados
+const originalLoadUserUI = window._loadUserUIOriginal;
+const observer = new MutationObserver(() => {
+  const comfortEl = document.getElementById("profileComfort");
+  const fillEl    = document.getElementById("comfortFill");
+  const barEl     = document.getElementById("comfortBar");
+  if (comfortEl && fillEl) {
+    const text = comfortEl.textContent;
+    let pct = 33;
+    if (text.includes("Médio"))  pct = 66;
+    if (text.includes("Alto"))   pct = 100;
+    fillEl.style.width = pct + "%";
+    if (barEl) barEl.setAttribute("aria-valuenow", pct);
+    // Badge
+    const badge = document.getElementById("profileComfortBadge");
+    if (badge) badge.textContent = text;
+  }
+});
+const comfortTarget = document.getElementById("profileComfort");
+if (comfortTarget) observer.observe(comfortTarget, { childList:true, subtree:true, characterData:true });
+</script>
+</body>
+</html>

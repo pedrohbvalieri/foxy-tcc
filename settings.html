@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<title>Foxy 🦊 — Configurações</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="settings">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+<div id="foxy-loader" role="status" aria-label="Carregando…">
+  <div class="loader-logo">Foxy 🦊</div>
+  <div class="loader-imgs" aria-hidden="true">
+    <div class="loader-img a">⚙️</div>
+    <div class="loader-img b">🌸</div>
+  </div>
+  <p class="loader-text">Carregando configurações… 🌸</p>
+</div>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<nav class="nav" role="navigation" aria-label="Navegação principal">
+  <div class="nav-logo" onclick="showPage('dashboard')" role="link" tabindex="0">Foxy 🦊</div>
+  <div class="nav-actions">
+    <button class="nav-btn" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    <button class="nav-btn" onclick="goBack()" aria-label="Voltar">←</button>
+    <div class="nav-avatar" onclick="showPage('profile')" role="button" tabindex="0" aria-label="Meu perfil">🦊</div>
+  </div>
+</nav>
+
+<main id="main-content" class="page-enter">
+  <div class="settings-wrap">
+    <h1 class="page-title">⚙️ Configurações</h1>
+    <p class="page-sub">Personalize o Foxy do seu jeito. Tudo é opcional e pode ser mudado a qualquer hora 🌸</p>
+
+    <!-- APARÊNCIA -->
+    <section class="settings-group" aria-labelledby="appearanceTitle">
+      <h2 class="settings-group-title" id="appearanceTitle">🎨 Aparência</h2>
+      <div class="card" style="padding:0;overflow:hidden">
+
+        <div class="setting-row" style="padding:16px 20px">
+          <div class="setting-info">
+            <div class="setting-label">Modo Escuro</div>
+            <div class="setting-desc">Fundo escuro, mais suave à noite</div>
+          </div>
+          <label class="toggle" aria-label="Ativar modo escuro">
+            <input type="checkbox" id="darkToggleCheck" data-setting="theme"
+              onchange="toggleTheme()" aria-describedby="darkToggleCheck-desc"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+
+        <div class="setting-row" style="padding:16px 20px">
+          <div class="setting-info">
+            <div class="setting-label">Alto Contraste</div>
+            <div class="setting-desc">Aumenta o contraste de cores para melhor visibilidade</div>
+          </div>
+          <label class="toggle" aria-label="Ativar alto contraste">
+            <input type="checkbox" id="contrastCheck" data-setting="contrast"
+              onchange="toggleContrast()"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+
+        <div class="setting-row" style="padding:16px 20px">
+          <div class="setting-info">
+            <div class="setting-label">Fonte para Dislexia</div>
+            <div class="setting-desc">Fonte mais legível para quem tem dislexia</div>
+          </div>
+          <label class="toggle" aria-label="Ativar fonte para dislexia">
+            <input type="checkbox" id="dyslexiaCheck" data-setting="dyslexia"
+              onchange="toggleDyslexia()"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+
+        <div class="setting-row" style="padding:16px 20px">
+          <div class="setting-info">
+            <div class="setting-label">Tamanho da Fonte</div>
+            <div class="setting-desc">Ajuste o tamanho do texto em todo o app</div>
+          </div>
+          <div class="font-controls" role="group" aria-label="Tamanho da fonte">
+            <button onclick="changeFontSize(-1)" aria-label="Diminuir fonte">A−</button>
+            <span class="font-size-display" id="fontSizeDisplay" aria-live="polite">18px</span>
+            <button onclick="changeFontSize(1)" aria-label="Aumentar fonte">A+</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SENSORIAL -->
+    <section class="settings-group" aria-labelledby="sensoryTitle">
+      <h2 class="settings-group-title" id="sensoryTitle">🌿 Modo Sensorial</h2>
+      <div class="card" style="padding:0;overflow:hidden">
+
+        <div class="setting-row" style="padding:16px 20px">
+          <div class="setting-info">
+            <div class="setting-label">Modo Sensorial Suave</div>
+            <div class="setting-desc">Reduz sombras, animações e estímulos visuais</div>
+          </div>
+          <label class="toggle" aria-label="Ativar modo sensorial">
+            <input type="checkbox" id="sensoryCheck" data-setting="sensory"
+              onchange="toggleSensory()"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+
+        <div class="setting-row" style="padding:16px 20px">
+          <div class="setting-info">
+            <div class="setting-label">Reduzir Animações</div>
+            <div class="setting-desc">Para quem prefere menos movimento na tela</div>
+          </div>
+          <label class="toggle" aria-label="Reduzir animações">
+            <input type="checkbox" id="motionCheck" data-setting="motion"
+              onchange="toggleMotion()"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+
+        <div class="setting-row" style="padding:16px 20px">
+          <div class="setting-info">
+            <div class="setting-label">Modo Silencioso</div>
+            <div class="setting-desc">Desativa todos os sons e notificações sonoras</div>
+          </div>
+          <label class="toggle" aria-label="Ativar modo silencioso">
+            <input type="checkbox" id="silentCheck" data-setting="silent"
+              onchange="_toggleSilent()"/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOM AMBIENTE -->
+    <section class="settings-group" aria-labelledby="soundTitle">
+      <h2 class="settings-group-title" id="soundTitle">🎵 Som Ambiente</h2>
+      <div class="card">
+        <p style="color:var(--text2);font-size:0.85rem;margin-bottom:16px">Sons calmantes e opcionais para criar seu espaço ideal</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px" role="group" aria-label="Sons ambiente">
+          <button id="ambient-none" class="btn btn-ghost active" onclick="setAmbient('none')"
+            aria-pressed="true" style="flex-direction:column;gap:6px;padding:14px 8px">
+            <span style="font-size:1.5rem">🔇</span><span style="font-size:0.8rem">Silêncio</span>
+          </button>
+          <button id="ambient-rain" class="btn btn-ghost" onclick="setAmbient('rain')"
+            aria-pressed="false" style="flex-direction:column;gap:6px;padding:14px 8px">
+            <span style="font-size:1.5rem">🌧️</span><span style="font-size:0.8rem">Chuva</span>
+          </button>
+          <button id="ambient-waves" class="btn btn-ghost" onclick="setAmbient('waves')"
+            aria-pressed="false" style="flex-direction:column;gap:6px;padding:14px 8px">
+            <span style="font-size:1.5rem">🌊</span><span style="font-size:0.8rem">Ondas</span>
+          </button>
+          <button id="ambient-forest" class="btn btn-ghost" onclick="setAmbient('forest')"
+            aria-pressed="false" style="flex-direction:column;gap:6px;padding:14px 8px">
+            <span style="font-size:1.5rem">🌿</span><span style="font-size:0.8rem">Floresta</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRIVACIDADE -->
+    <section class="settings-group" aria-labelledby="privacyTitle">
+      <h2 class="settings-group-title" id="privacyTitle">🛡️ Privacidade</h2>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="setting-row" style="padding:16px 20px">
+          <div class="setting-info">
+            <div class="setting-label">Perfil Anônimo</div>
+            <div class="setting-desc">Outros usuários veem apenas seu avatar e apelido</div>
+          </div>
+          <label class="toggle" aria-label="Ativar perfil anônimo">
+            <input type="checkbox" checked/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+        <div class="setting-row" style="padding:16px 20px">
+          <div class="setting-info">
+            <div class="setting-label">Chats Efêmeros</div>
+            <div class="setting-desc">Mensagens excluídas após cada sessão</div>
+          </div>
+          <label class="toggle" aria-label="Ativar chats efêmeros">
+            <input type="checkbox" checked/>
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- AÇÕES -->
+    <section class="settings-group" aria-labelledby="accountTitle">
+      <h2 class="settings-group-title" id="accountTitle">👤 Conta</h2>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button class="btn btn-ghost btn-full" onclick="showPage('profile')" style="justify-content:flex-start">👤 Ver meu perfil</button>
+        <button class="btn btn-ghost btn-full" onclick="showPage('safety')" style="justify-content:flex-start">🛡️ Central de segurança</button>
+        <button class="btn btn-ghost btn-full" onclick="showPage('achievements')" style="justify-content:flex-start">🏆 Minhas conquistas</button>
+        <button class="btn btn-ghost btn-full" onclick="showPage('dashboard')" style="justify-content:flex-start">🏠 Voltar ao início</button>
+        <button class="btn btn-ghost btn-full" onclick="logout()" style="justify-content:flex-start;color:var(--text3)">🚪 Sair da conta</button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script type="module" src="app.js"></script>
+<script type="module">
+// Sincroniza checkboxes com localStorage ao carregar
+function syncChecks() {
+  const darkCheck = document.getElementById("darkToggleCheck");
+  if (darkCheck) darkCheck.checked = document.documentElement.dataset.theme === "dark";
+
+  const map = { sensoryCheck:"sensory", motionCheck:"motion", contrastCheck:"contrast", dyslexiaCheck:"dyslexia", silentCheck:"silent" };
+  Object.entries(map).forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el) el.checked = localStorage.getItem(key) === "true";
+  });
+}
+
+window._toggleSilent = function() {
+  const check = document.getElementById("silentCheck");
+  const on = check?.checked ?? false;
+  localStorage.setItem("silent", on);
+  showToast(on ? "Modo silencioso ativado 🔇" : "Som ativado 🔊", "info");
+};
+
+// Sincroniza dark mode toggle com o estado real
+const darkCheck = document.getElementById("darkToggleCheck");
+if (darkCheck) {
+  darkCheck.addEventListener("change", () => {
+    const isDark = document.documentElement.dataset.theme === "dark";
+    // toggleTheme já foi chamado pelo onchange, agora só sincronia visual
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(syncChecks, 100);
+});
+syncChecks();
+</script>
+</body>
+</html>

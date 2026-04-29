@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<title>Foxy 🦊 — Quiz Cooperativo</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="quiz-game">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<nav class="nav" role="navigation" aria-label="Navegação principal">
+  <div class="nav-logo" onclick="showPage('dashboard')" role="link" tabindex="0">Foxy 🦊</div>
+  <div class="nav-actions">
+    <button class="nav-btn" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    <button class="nav-btn" onclick="leaveGame()" aria-label="Sair do jogo">🚪</button>
+    <div class="nav-avatar" onclick="showPage('profile')" role="button" tabindex="0" aria-label="Meu perfil">🦊</div>
+  </div>
+</nav>
+
+<main id="main-content" class="page-enter">
+  <div class="game-wrap">
+
+    <header class="game-header">
+      <div class="game-header-title">🧩 Quiz Cooperativo</div>
+      <div class="timer-badge" id="timerDisplay" aria-live="polite">3:00</div>
+      <span style="background:var(--green-pale);color:var(--green-deep);padding:6px 16px;border-radius:99px;font-size:0.82rem;font-weight:700">
+        🌟 Pontuação: <span id="scoreDisplay">0</span>
+      </span>
+    </header>
+
+    <div class="game-body">
+      <div class="game-main">
+
+        <!-- Progresso -->
+        <div style="margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:0.82rem;color:var(--text2)">
+            <span>Pergunta <span id="qNumDisplay">1</span> de <span id="qTotalDisplay">8</span></span>
+            <span>🤝 Respondam juntos!</span>
+          </div>
+          <div class="quiz-progress" id="quizProgress" role="progressbar"
+            aria-label="Progresso do quiz" aria-valuenow="1" aria-valuemin="1" aria-valuemax="8"></div>
+        </div>
+
+        <!-- Pergunta -->
+        <div class="quiz-question" id="quizQuestion" role="heading" aria-level="2" aria-live="polite">
+          Carregando pergunta…
+        </div>
+
+        <!-- Categoria -->
+        <div style="text-align:center;margin-bottom:12px">
+          <span id="quizCategory" style="background:var(--blue-pale);color:var(--blue-deep);padding:4px 14px;border-radius:99px;font-size:0.8rem;font-weight:700"></span>
+        </div>
+
+        <!-- Opções -->
+        <div class="quiz-options" id="quizOptions" role="group" aria-label="Opções de resposta"></div>
+
+        <!-- Resultado -->
+        <div id="quizResult" style="display:none;text-align:center;padding:20px;border-radius:var(--radius);margin-top:12px;transition:var(--trans-soft)">
+          <div id="quizResultEmoji" style="font-size:3rem;margin-bottom:8px"></div>
+          <div id="quizResultText" style="font-family:var(--font-title);font-size:1.1rem;font-weight:800;margin-bottom:4px"></div>
+          <div id="quizResultExplain" style="color:var(--text2);font-size:0.85rem"></div>
+        </div>
+
+        <!-- Botão próxima -->
+        <button id="nextQBtn" class="btn btn-secondary btn-full" onclick="nextQuestion()" style="display:none;margin-top:8px">
+          Próxima pergunta →
+        </button>
+
+        <!-- Resumo final -->
+        <div id="quizFinal" style="display:none;text-align:center;padding:24px">
+          <div style="font-size:3.5rem;margin-bottom:16px">🎉</div>
+          <h2 style="font-family:var(--font-title);font-size:1.4rem;font-weight:900;margin-bottom:8px">Quiz concluído!</h2>
+          <p style="color:var(--text2);margin-bottom:20px">Vocês acertaram <strong id="finalScore">0</strong> de 8 perguntas juntos! 🌟</p>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="restartQuiz()">🔄 Jogar novamente</button>
+            <button class="btn btn-ghost" onclick="showPage('dashboard')">🏠 Início</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat -->
+      <aside class="game-chat" aria-label="Chat do jogo">
+        <div class="chat-header">💬 Chat guiado</div>
+        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
+        <div class="quick-replies" role="group" aria-label="Respostas rápidas">
+          <button class="qr-btn" onclick="sendQuickReply('Eu acho que é a B! 🤔')">🤔 Acho que é B</button>
+          <button class="qr-btn" onclick="sendQuickReply('Hmm, não tenho certeza… 😅')">😅 Não sei</button>
+          <button class="qr-btn" onclick="sendQuickReply('Boa resposta! 🎉')">🎉 Boa!</button>
+          <button class="qr-btn" onclick="sendQuickReply('Vamos pensar juntos! 🧩')">🧩 Vamos pensar</button>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-input" type="text" id="chatInput"
+            placeholder="Discuta a resposta…"
+            aria-label="Chat"
+            onkeydown="if(event.key==='Enter')sendChatMsg()"/>
+          <button class="btn btn-primary btn-sm" onclick="sendChatMsg()" aria-label="Enviar">→</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="app.js"></script>
+<script type="module">
+const QUIZ_QUESTIONS = [
+  { q:"Qual animal vive no oceano?",         opts:["🦁 Leão","🐬 Golfinho","🐘 Elefante","🦊 Raposa"],  a:1, cat:"🌊 Natureza",   explain:"Os golfinhos são mamíferos marinhos!" },
+  { q:"Qual emoji representa alegria?",       opts:["😢 Triste","😴 Sonolento","😄 Feliz","😠 Bravo"],   a:2, cat:"😊 Emoções",   explain:"😄 representa felicidade e alegria!" },
+  { q:"O que é 🌈?",                         opts:["Tempestade","Neve","Arco-íris","Vento"],             a:2, cat:"🌤️ Natureza",  explain:"O arco-íris aparece após a chuva com o sol!" },
+  { q:"Qual fruta é vermelha?",              opts:["🍌 Banana","🍇 Uva","🍎 Maçã","🍊 Laranja"],         a:2, cat:"🍎 Alimentos", explain:"A maçã vermelha é uma fruta deliciosa!" },
+  { q:"Em qual estação as flores desabrocham?", opts:["❄️ Inverno","🌺 Primavera","🍂 Outono","☀️ Verão"],a:1, cat:"🌸 Estações",  explain:"Na primavera, a natureza renasce com flores!" },
+  { q:"Qual instrumento tem cordas?",        opts:["🥁 Bateria","🎸 Violão","🎺 Trompete","🎷 Saxofone"], a:1, cat:"🎵 Música",    explain:"O violão e a guitarra têm cordas!" },
+  { q:"Quantas horas tem um dia?",           opts:["12 horas","18 horas","24 horas","48 horas"],          a:2, cat:"⏰ Tempo",      explain:"Um dia tem exatamente 24 horas!" },
+  { q:"Qual cor mistura azul e amarelo?",    opts:["Roxo","Laranja","Verde","Vermelho"],                   a:2, cat:"🎨 Cores",      explain:"Azul + Amarelo = Verde! Magia das cores!" },
+];
+
+let qIdx = 0;
+let score = 0;
+let answered = false;
+
+function renderProgress() {
+  const el = document.getElementById("quizProgress");
+  if (!el) return;
+  el.innerHTML = QUIZ_QUESTIONS.map((_, i) => {
+    let cls = "quiz-dot";
+    if (i < qIdx) cls += " done";
+    else if (i === qIdx) cls += " current";
+    return `<div class="${cls}" aria-hidden="true"></div>`;
+  }).join("");
+  const numEl = document.getElementById("qNumDisplay");
+  if (numEl) numEl.textContent = Math.min(qIdx + 1, QUIZ_QUESTIONS.length);
+}
+
+function showQuestion() {
+  answered = false;
+  const q = QUIZ_QUESTIONS[qIdx];
+  document.getElementById("quizQuestion").textContent = q.q;
+  document.getElementById("quizCategory").textContent = q.cat;
+  document.getElementById("quizResult").style.display = "none";
+  document.getElementById("nextQBtn").style.display = "none";
+
+  const opts = document.getElementById("quizOptions");
+  opts.innerHTML = q.opts.map((o, i) =>
+    `<button class="quiz-option" onclick="checkAnswer(${i})" aria-label="${o}">
+       ${o}
+     </button>`
+  ).join("");
+  renderProgress();
+}
+
+window.checkAnswer = function(chosen) {
+  if (answered) return;
+  answered = true;
+  const q = QUIZ_QUESTIONS[qIdx];
+  const correct = chosen === q.a;
+  if (correct) score++;
+
+  // Visual feedback
+  document.querySelectorAll(".quiz-option").forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.a)     btn.classList.add("correct");
+    if (i === chosen && !correct) btn.classList.add("wrong");
+  });
+
+  document.getElementById("scoreDisplay").textContent = score;
+
+  // Resultado
+  const res = document.getElementById("quizResult");
+  res.style.display = "block";
+  res.style.background = correct ? "var(--green-pale)" : "var(--blue-pale)";
+  res.style.border = `1px solid ${correct ? "var(--green)" : "var(--blue)"}`;
+  document.getElementById("quizResultEmoji").textContent = correct ? "🎉" : "💙";
+  document.getElementById("quizResultText").textContent = correct ? "Correto! Muito bem! 🌟" : "Quase! Continue tentando! 💙";
+  document.getElementById("quizResultExplain").textContent = q.explain;
+
+  showToast(correct ? "Resposta certa! 🎉" : "Quase! 💙", correct ? "success" : "info");
+  addChatMessage("Foxy IA 🦊", correct ? "Excelente! Vocês são incríveis! 🌟" : `Quase! A resposta era: ${q.opts[q.a]} 💙`, false);
+
+  // Botão next
+  if (qIdx < QUIZ_QUESTIONS.length - 1) {
+    document.getElementById("nextQBtn").style.display = "block";
+  } else {
+    setTimeout(showFinal, 1500);
+  }
+};
+
+window.nextQuestion = function() {
+  qIdx++;
+  if (qIdx < QUIZ_QUESTIONS.length) {
+    showQuestion();
+    addChatMessage("Foxy IA 🦊", `Pergunta ${qIdx + 1}! Pensem juntos! 🧩`, false);
+  } else {
+    showFinal();
+  }
+};
+
+function showFinal() {
+  document.getElementById("quizOptions").style.display = "none";
+  document.getElementById("quizResult").style.display = "none";
+  document.getElementById("nextQBtn").style.display = "none";
+  document.getElementById("quizFinal").style.display = "block";
+  document.getElementById("finalScore").textContent = score;
+  showToast(`Quiz concluído! ${score}/8 acertos! 🎊`, "success");
+  addChatMessage("Foxy IA 🦊", `Parabéns! Vocês acertaram ${score} de 8 juntos! Que dupla incrível! 🎉`, false);
+}
+
+window.restartQuiz = function() {
+  qIdx = 0; score = 0; answered = false;
+  document.getElementById("scoreDisplay").textContent = "0";
+  document.getElementById("quizOptions").style.display = "";
+  document.getElementById("quizFinal").style.display = "none";
+  showQuestion();
+};
+
+document.getElementById("qTotalDisplay").textContent = QUIZ_QUESTIONS.length;
+showQuestion();
+
+setTimeout(() => {
+  if (typeof addChatMessage === "function") {
+    addChatMessage("Foxy IA 🦊", "Olá! Vamos responder as perguntas juntos! Não tem certo ou errado, é cooperação! 🧩", false);
+  }
+}, 500);
+</script>
+</body>
+</html>

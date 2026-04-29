@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<title>Foxy 🦊 — Encontrando parceiro…</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.waiting-ring {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  border: 4px solid var(--border);
+  border-top-color: var(--blue-deep);
+  border-right-color: var(--green-deep);
+  animation: ringSpinFox 1.6s linear infinite;
+  margin: 0 auto 32px;
+}
+@keyframes ringSpinFox {
+  to { transform: rotate(360deg); }
+}
+body.reduce-motion .waiting-ring {
+  animation: none;
+  border-color: var(--blue-deep);
+}
+.fox-anim {
+  font-size: 3.5rem;
+  animation: foxBounce 1.8s ease-in-out infinite;
+  display: block;
+  margin-bottom: 8px;
+}
+@keyframes foxBounce {
+  0%,100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-16px) scale(1.1); }
+}
+body.reduce-motion .fox-anim { animation: none; }
+</style>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="waiting">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<nav class="nav" role="navigation" aria-label="Navegação principal">
+  <div class="nav-logo" onclick="showPage('dashboard')" role="link" tabindex="0">Foxy 🦊</div>
+  <div class="nav-actions">
+    <button class="nav-btn" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    <div class="nav-avatar" onclick="showPage('profile')" role="button" tabindex="0" aria-label="Meu perfil">🦊</div>
+  </div>
+</nav>
+
+<main id="main-content" class="page-enter">
+  <div class="waiting-wrap">
+    <div class="waiting-card">
+
+      <!-- Anel de Loading + Fox -->
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:8px">
+        <div class="waiting-ring" aria-hidden="true"></div>
+        <div style="position:absolute;font-size:2.5rem" aria-hidden="true">🦊</div>
+      </div>
+
+      <h1 style="font-family:var(--font-title);font-size:1.6rem;font-weight:800;margin-bottom:12px" id="waitingTitle">
+        Encontrando seu parceiro…
+      </h1>
+      <p style="color:var(--text2);margin-bottom:8px;font-size:0.95rem" id="waitingGame">
+        Preparando o jogo…
+      </p>
+      <p style="color:var(--text3);margin-bottom:28px;font-size:0.85rem">
+        Estamos procurando alguém com interesses parecidos 🌈
+      </p>
+
+      <!-- Dicas de conforto -->
+      <div style="background:var(--green-pale);border:1px solid var(--green);border-radius:var(--radius);padding:16px;margin-bottom:24px;text-align:left" role="region" aria-label="Dica de conforto">
+        <p id="comfortTip" style="font-size:0.88rem;color:var(--green-deep);line-height:1.6">
+          💡 Respira fundo. Você está seguro(a) aqui. A conexão pode levar alguns segundos.
+        </p>
+      </div>
+
+      <div class="waiting-dots" aria-hidden="true">
+        <div class="waiting-dot"></div>
+        <div class="waiting-dot"></div>
+        <div class="waiting-dot"></div>
+      </div>
+
+      <button class="btn btn-ghost btn-full" style="margin-top:32px" onclick="showPage('games')">
+        ← Cancelar e voltar
+      </button>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="app.js"></script>
+<script type="module">
+  // Lê parâmetros da URL
+  const params  = new URLSearchParams(window.location.search);
+  const gameId  = params.get("game") ?? "draw";
+  const mode    = params.get("mode") ?? "partner";
+
+  const gameNames = {
+    draw:   "🎨 Desenho Colaborativo",
+    story:  "📖 História Coletiva",
+    quiz:   "🧩 Quiz Cooperativo",
+    puzzle: "🖼️ Puzzle em Equipe",
+    emoji:  "😄 Adivinhe o Emoji",
+  };
+  const gamePages = {
+    draw:   "draw-game.html",
+    story:  "story-game.html",
+    quiz:   "quiz-game.html",
+    puzzle: "puzzle-game.html",
+    emoji:  "emoji-game.html",
+  };
+  const tips = [
+    "💡 Respira fundo. Você está seguro(a) aqui.",
+    "🌸 Cada jogo é uma aventura cooperativa. Sem pressão!",
+    "🌈 Lembre: o objetivo é se divertir juntos, não competir.",
+    "🤝 Seu parceiro também está animado para jogar contigo!",
+    "🌿 Se em algum momento se sentir desconfortável, pode sair.",
+  ];
+
+  // Atualiza textos
+  const gameEl = document.getElementById("waitingGame");
+  if (gameEl) gameEl.textContent = gameNames[gameId] ?? gameId;
+
+  // Rotaciona dicas
+  let tipIdx = 0;
+  const tipEl = document.getElementById("comfortTip");
+  const tipInterval = setInterval(() => {
+    tipIdx = (tipIdx + 1) % tips.length;
+    if (tipEl) {
+      tipEl.style.opacity = "0";
+      setTimeout(() => {
+        tipEl.textContent = tips[tipIdx];
+        tipEl.style.opacity = "1";
+      }, 300);
+    }
+  }, 3000);
+
+  // Auto-redirect após 2-4s
+  const delay = 2000 + Math.random() * 2000;
+  setTimeout(() => {
+    clearInterval(tipInterval);
+    // Usa showToast se disponível
+    if (typeof showToast === "function") {
+      showToast("Parceiro encontrado! Iniciando jogo… 🌟", "success");
+    }
+    const page = gamePages[gameId] ?? "draw-game.html";
+    setTimeout(() => {
+      window.location.href = `${page}?mode=${mode}`;
+    }, 800);
+  }, delay);
+</script>
+</body>
+</html>

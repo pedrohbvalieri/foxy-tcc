@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<title>Foxy 🦊 — História Coletiva</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="story-game">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<nav class="nav" role="navigation" aria-label="Navegação principal">
+  <div class="nav-logo" onclick="showPage('dashboard')" role="link" tabindex="0">Foxy 🦊</div>
+  <div class="nav-actions">
+    <button class="nav-btn" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    <button class="nav-btn" onclick="leaveGame()" aria-label="Sair do jogo">🚪</button>
+    <div class="nav-avatar" onclick="showPage('profile')" role="button" tabindex="0" aria-label="Meu perfil">🦊</div>
+  </div>
+</nav>
+
+<main id="main-content" class="page-enter">
+  <div class="game-wrap">
+
+    <header class="game-header">
+      <div class="game-header-title">📖 História Coletiva</div>
+      <div class="timer-badge" id="timerDisplay" aria-live="polite">3:00</div>
+      <span style="background:var(--purple-pale);color:var(--purple-deep);padding:6px 16px;border-radius:99px;font-size:0.82rem;font-weight:700">
+        ✍️ Escrita cooperativa
+      </span>
+    </header>
+
+    <div class="game-body">
+      <div class="game-main">
+        <h2 style="font-family:var(--font-title);font-weight:800;font-size:1rem;margin-bottom:4px">Nossa história</h2>
+        <p style="color:var(--text3);font-size:0.82rem;margin-bottom:12px">Cada um adiciona uma parte. A história cresce junto!</p>
+
+        <!-- Área da história -->
+        <div class="story-area" id="storyArea" role="log" aria-live="polite" aria-label="História em construção">
+          <p style="color:var(--text3);font-style:italic">A história começa aqui… ✨</p>
+        </div>
+
+        <!-- Sugestões -->
+        <div>
+          <p style="font-size:0.82rem;font-weight:700;color:var(--text2);margin-bottom:8px">💡 Sugestões para continuar:</p>
+          <div class="story-suggestions" id="storySuggestions" role="group" aria-label="Sugestões de continuação"></div>
+        </div>
+
+        <!-- Input -->
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input class="input" type="text" id="storyInput"
+            placeholder="Continue a história…"
+            aria-label="Continue a história aqui"
+            style="flex:1;min-width:200px"
+            onkeydown="if(event.key==='Enter')addStoryLine()"/>
+          <button class="btn btn-primary" onclick="addStoryLine()" aria-label="Adicionar à história">
+            Adicionar ✨
+          </button>
+        </div>
+
+        <!-- Personagens -->
+        <div style="background:var(--purple-pale);border:1px solid var(--purple);border-radius:var(--radius-sm);padding:14px" role="region" aria-label="Personagens da história">
+          <div style="font-weight:800;font-size:0.88rem;margin-bottom:8px;color:var(--purple-deep)">🎭 Personagens da história</div>
+          <div id="characters" style="display:flex;gap:8px;flex-wrap:wrap">
+            <span class="tag" style="background:var(--bg2)">🦊 A Raposa Curiosa</span>
+            <span class="tag" style="background:var(--bg2)">🌸 A Fada da Floresta</span>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="addCharacter()" style="margin-top:10px" aria-label="Adicionar personagem">
+            + Adicionar personagem
+          </button>
+        </div>
+      </div>
+
+      <!-- Chat -->
+      <aside class="game-chat" aria-label="Chat do jogo">
+        <div class="chat-header">💬 Chat guiado</div>
+        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
+        <div class="quick-replies" role="group" aria-label="Respostas rápidas">
+          <button class="qr-btn" onclick="sendQuickReply('Adoro essa ideia! 💜')">💜 Adoro!</button>
+          <button class="qr-btn" onclick="sendQuickReply('Que reviravolta! 😮')">😮 Que surpresa!</button>
+          <button class="qr-btn" onclick="sendQuickReply('Vamos dar um final feliz? 🌟')">🌟 Final feliz?</button>
+          <button class="qr-btn" onclick="sendQuickReply('Pode continuar! 😊')">😊 Continue!</button>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-input" type="text" id="chatInput"
+            placeholder="Comente sobre a história…"
+            aria-label="Comentário"
+            onkeydown="if(event.key==='Enter')sendChatMsg()"/>
+          <button class="btn btn-primary btn-sm" onclick="sendChatMsg()" aria-label="Enviar">→</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="app.js"></script>
+<script type="module">
+const SUGGESTIONS = [
+  "De repente, uma luz misteriosa apareceu na floresta…",
+  "E então eles descobriram um mapa mágico antigo…",
+  "No meio da jornada, encontraram um amigo inesperado…",
+  "O misterioso personagem revelou um segredo incrível…",
+  "Uma tempestade de estrelas iluminou o caminho…",
+  "Os amigos decidiram construir uma casa nas nuvens…",
+  "A chave dourada abriu uma porta para outro mundo…",
+  "Com coragem e amizade, eles venceram o desafio…",
+];
+
+const CHARACTERS = [
+  "🧙 O Feiticeiro Gentil",
+  "🐢 A Tartaruga Sábia",
+  "🌺 A Princesa das Flores",
+  "🦋 O Espírito da Floresta",
+  "⭐ A Estrela Cadente",
+];
+
+let charIdx = 0;
+
+function renderSuggestions() {
+  const el = document.getElementById("storySuggestions");
+  if (!el) return;
+  // Pega 3 aleatórias
+  const shuffled = [...SUGGESTIONS].sort(() => Math.random() - 0.5).slice(0, 3);
+  el.innerHTML = shuffled.map(s =>
+    `<button class="story-sug" onclick="useSuggestion('${s.replace(/'/g,"\\'")}')">💡 ${s}</button>`
+  ).join("");
+}
+
+window.useSuggestion = function(text) {
+  const i = document.getElementById("storyInput");
+  if (i) { i.value = text; i.focus(); }
+};
+
+window.addStoryLine = function() {
+  const i = document.getElementById("storyInput");
+  const t = i?.value.trim();
+  if (!t) return;
+  const a = document.getElementById("storyArea");
+  if (a) {
+    const firstTip = a.querySelector("p[style]");
+    if (firstTip) firstTip.remove();
+    const p = document.createElement("p");
+    p.innerHTML = `<strong style="color:var(--blue-deep)">Você:</strong> ${t}`;
+    a.appendChild(p);
+    a.scrollTop = a.scrollHeight;
+  }
+  i.value = "";
+  renderSuggestions();
+  // IA responde
+  setTimeout(() => {
+    const responses = SUGGESTIONS.filter(s => s !== t);
+    const reply = responses[Math.floor(Math.random() * responses.length)];
+    const a2 = document.getElementById("storyArea");
+    if (a2) {
+      const p2 = document.createElement("p");
+      p2.innerHTML = `<strong style="color:var(--purple-deep)">Foxy IA 🦊:</strong> ${reply}`;
+      a2.appendChild(p2);
+      a2.scrollTop = a2.scrollHeight;
+    }
+    addChatMessage("Foxy IA 🦊", "Que trecho incrível! Continue assim! 🌟", false);
+  }, 900);
+};
+
+window.addCharacter = function() {
+  const el = document.getElementById("characters");
+  if (!el) return;
+  const char = CHARACTERS[charIdx % CHARACTERS.length];
+  charIdx++;
+  const span = document.createElement("span");
+  span.className = "tag";
+  span.style.background = "var(--bg2)";
+  span.textContent = char;
+  el.insertBefore(span, el.lastElementChild);
+  showToast(`${char} entrou na história! ✨`, "success");
+};
+
+// Init
+renderSuggestions();
+
+setTimeout(() => {
+  if (typeof addChatMessage === "function") {
+    addChatMessage("Foxy IA 🦊", "Vamos criar uma história juntos! Você começa! 🌟 Pode usar as sugestões abaixo.", false);
+  }
+}, 500);
+</script>
+</body>
+</html>

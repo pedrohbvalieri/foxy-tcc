@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<title>Foxy 🦊 — Desenho Colaborativo</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="draw-game">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<nav class="nav" role="navigation" aria-label="Navegação principal">
+  <div class="nav-logo" onclick="showPage('dashboard')" role="link" tabindex="0">Foxy 🦊</div>
+  <div class="nav-actions">
+    <button class="nav-btn" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    <button class="nav-btn" onclick="leaveGame()" aria-label="Sair do jogo">🚪</button>
+    <div class="nav-avatar" onclick="showPage('profile')" role="button" tabindex="0" aria-label="Meu perfil">🦊</div>
+  </div>
+</nav>
+
+<main id="main-content" class="page-enter">
+  <div class="game-wrap">
+
+    <!-- Header -->
+    <header class="game-header">
+      <div class="game-header-title">🎨 Desenho Colaborativo</div>
+      <div class="timer-badge" id="timerDisplay" aria-live="polite" aria-label="Tempo restante">5:00</div>
+      <div style="display:flex;gap:8px">
+        <span style="background:var(--green-pale);color:var(--green-deep);padding:6px 16px;border-radius:99px;font-size:0.82rem;font-weight:700">
+          🤝 Cooperativo
+        </span>
+      </div>
+    </header>
+
+    <!-- Body -->
+    <div class="game-body">
+
+      <!-- Canvas Principal -->
+      <div class="game-main">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
+          <h2 style="font-family:var(--font-title);font-weight:800;font-size:1rem">Tela compartilhada</h2>
+          <span style="color:var(--text3);font-size:0.82rem">Ambos desenham juntos!</span>
+        </div>
+
+        <!-- Ferramentas -->
+        <div class="canvas-tools" role="toolbar" aria-label="Ferramentas de desenho">
+          <div class="color-palette" role="group" aria-label="Cores">
+            <button class="color-dot selected" style="background:#5BAED9" data-color="#5BAED9"
+              onclick="setColor('#5BAED9')" aria-label="Azul" aria-checked="true" role="radio"></button>
+            <button class="color-dot" style="background:#4DB87A" data-color="#4DB87A"
+              onclick="setColor('#4DB87A')" aria-label="Verde" aria-checked="false" role="radio"></button>
+            <button class="color-dot" style="background:#9C6FD6" data-color="#9C6FD6"
+              onclick="setColor('#9C6FD6')" aria-label="Roxo" aria-checked="false" role="radio"></button>
+            <button class="color-dot" style="background:#E8954A" data-color="#E8954A"
+              onclick="setColor('#E8954A')" aria-label="Laranja" aria-checked="false" role="radio"></button>
+            <button class="color-dot" style="background:#e74c3c" data-color="#e74c3c"
+              onclick="setColor('#e74c3c')" aria-label="Vermelho" aria-checked="false" role="radio"></button>
+            <button class="color-dot" style="background:#1A2332" data-color="#1A2332"
+              onclick="setColor('#1A2332')" aria-label="Preto" aria-checked="false" role="radio"></button>
+          </div>
+
+          <div class="size-btns" role="group" aria-label="Tamanho do pincel">
+            <button class="size-btn active" onclick="setSize(4)"
+              style="width:28px;height:28px" aria-pressed="true" aria-label="Pincel fino">
+              <div style="width:4px;height:4px;background:var(--text);border-radius:50%"></div>
+            </button>
+            <button class="size-btn" onclick="setSize(10)"
+              style="width:32px;height:32px" aria-pressed="false" aria-label="Pincel médio">
+              <div style="width:10px;height:10px;background:var(--text);border-radius:50%"></div>
+            </button>
+            <button class="size-btn" onclick="setSize(20)"
+              style="width:36px;height:36px" aria-pressed="false" aria-label="Pincel grosso">
+              <div style="width:18px;height:18px;background:var(--text);border-radius:50%"></div>
+            </button>
+          </div>
+
+          <button class="btn btn-ghost btn-sm" onclick="clearCanvas()" aria-label="Limpar tela">
+            🗑️ Limpar
+          </button>
+        </div>
+
+        <!-- Canvas -->
+        <div class="canvas-container">
+          <canvas id="drawCanvas" aria-label="Tela de desenho colaborativo" role="img"
+            style="height:320px;border-radius:var(--radius-sm)"></canvas>
+        </div>
+
+        <!-- Tema sugerido -->
+        <div style="background:var(--blue-pale);border:1px solid var(--blue);border-radius:var(--radius-sm);padding:14px;display:flex;align-items:center;gap:12px" role="region" aria-label="Tema sugerido">
+          <span style="font-size:1.5rem" aria-hidden="true">💡</span>
+          <div>
+            <div style="font-weight:800;font-size:0.9rem;margin-bottom:2px">Tema sugerido</div>
+            <div id="drawTheme" style="color:var(--text2);font-size:0.85rem">Um jardim encantado com flores coloridas 🌺</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="newTheme()" style="margin-left:auto;flex-shrink:0" aria-label="Novo tema">Novo tema</button>
+        </div>
+      </div>
+
+      <!-- Chat -->
+      <aside class="game-chat" aria-label="Chat do jogo">
+        <div class="chat-header">💬 Chat guiado</div>
+        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Mensagens do chat"></div>
+
+        <div class="quick-replies" role="group" aria-label="Respostas rápidas">
+          <button class="qr-btn" onclick="sendQuickReply('Que bonito! 🌟')">🌟 Que bonito!</button>
+          <button class="qr-btn" onclick="sendQuickReply('Adoro esta cor! 🎨')">🎨 Adoro!</button>
+          <button class="qr-btn" onclick="sendQuickReply('Pode continuar aqui 👉')">👉 Continua aqui</button>
+          <button class="qr-btn" onclick="sendQuickReply('Ficou ótimo! 🥰')">🥰 Ótimo!</button>
+        </div>
+
+        <div class="chat-input-row">
+          <input class="chat-input" type="text" id="chatInput"
+            placeholder="Digite uma mensagem…"
+            aria-label="Digite sua mensagem"
+            onkeydown="if(event.key==='Enter')sendChatMsg()"/>
+          <button class="btn btn-primary btn-sm" onclick="sendChatMsg()" aria-label="Enviar">→</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="app.js"></script>
+<script type="module">
+  const DRAW_THEMES = [
+    "Um jardim encantado com flores coloridas 🌺",
+    "Uma floresta mágica ao anoitecer 🌙",
+    "O oceano com criaturas coloridas 🐠",
+    "Uma cidade feliz e colorida 🏙️",
+    "Animais amigos em um piquenique 🧺",
+    "Um arco-íris após a chuva 🌈",
+    "Um espaço estelar com planetas 🪐",
+  ];
+  let themeIdx = Math.floor(Math.random() * DRAW_THEMES.length);
+
+  window.newTheme = function() {
+    themeIdx = (themeIdx + 1) % DRAW_THEMES.length;
+    const el = document.getElementById("drawTheme");
+    if (el) {
+      el.style.opacity = "0";
+      setTimeout(() => { el.textContent = DRAW_THEMES[themeIdx]; el.style.opacity = "1"; }, 200);
+    }
+    showToast("Novo tema escolhido! 🎨", "info");
+  };
+
+  // IA responde com feedback sobre o desenho
+  setTimeout(() => {
+    if (typeof addChatMessage === "function") {
+      addChatMessage("Foxy IA 🦊", "Olá! Vamos criar algo lindo juntos! 🎨 O tema de hoje é o jardim encantado!", false);
+    }
+  }, 500);
+
+  setTimeout(() => {
+    if (typeof addChatMessage === "function") {
+      addChatMessage("Foxy IA 🦊", "Você pode começar pelas flores! Que cor você vai usar primeiro? 🌺", false);
+    }
+  }, 3000);
+</script>
+</body>
+</html>

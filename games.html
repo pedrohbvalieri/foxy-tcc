@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<title>Foxy 🦊 — Jogos</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="games">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+<div id="foxy-loader" role="status" aria-label="Carregando…">
+  <div class="loader-logo">Foxy 🦊</div>
+  <div class="loader-imgs" aria-hidden="true">
+    <div class="loader-img a">🎮</div>
+    <div class="loader-img b">🌸</div>
+  </div>
+  <p class="loader-text">Preparando os jogos… 🎮</p>
+</div>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<nav class="nav" role="navigation" aria-label="Navegação principal">
+  <div class="nav-logo" onclick="showPage('dashboard')" role="link" tabindex="0">Foxy 🦊</div>
+  <div class="nav-actions">
+    <button class="nav-btn" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    <button class="nav-btn" onclick="goBack()" aria-label="Voltar">←</button>
+    <div class="nav-avatar" onclick="showPage('profile')" role="button" tabindex="0" aria-label="Meu perfil">🦊</div>
+  </div>
+</nav>
+
+<main id="main-content" class="page-enter">
+  <div class="section" style="padding-top:40px">
+    <h1 class="page-title">Escolha seu jogo 🎮</h1>
+    <p class="page-sub">Todos cooperativos. Sem competição. Só diversão juntos!</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px" id="allGamesGrid" role="list" aria-label="Todos os jogos disponíveis"></div>
+  </div>
+</main>
+
+<!-- Modal de Conforto -->
+<div id="comfortModal" class="modal-overlay" aria-hidden="true" aria-modal="true" role="dialog" aria-labelledby="comfortTitle"
+  onclick="if(event.target===this)closeComfort()">
+  <div class="modal">
+    <h2 class="modal-title" id="comfortTitle">Como quer jogar? 🌸</h2>
+    <p class="modal-sub">Escolha o modo que te deixa mais confortável hoje</p>
+    <div class="comfort-options" role="group">
+      <button class="comfort-btn" onclick="startGame('partner')">
+        <div class="comfort-icon">🤝</div>
+        <div class="comfort-info">
+          <strong>Com parceiro real</strong>
+          <span>Conectar com outra pessoa</span>
+        </div>
+      </button>
+      <button class="comfort-btn" onclick="startGame('ai')">
+        <div class="comfort-icon">🦊</div>
+        <div class="comfort-info">
+          <strong>Com a Foxy IA</strong>
+          <span>Praticar sozinho com IA amigável</span>
+        </div>
+      </button>
+      <button class="comfort-btn" onclick="startGame('silent')">
+        <div class="comfort-icon">🌙</div>
+        <div class="comfort-info">
+          <strong>Modo quieto</strong>
+          <span>Só você, sem pressão</span>
+        </div>
+      </button>
+    </div>
+    <button class="btn btn-ghost btn-full" style="margin-top:16px" onclick="closeComfort()">Cancelar</button>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

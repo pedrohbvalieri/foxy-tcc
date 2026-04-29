@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<meta name="description" content="Foxy — Conecte-se no seu ritmo. Sem pressão. Só alegria. Plataforma calma para pessoas autistas."/>
+<title>FOXY</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="landing">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+
+<!-- LOADING SCREEN -->
+<div id="foxy-loader" role="status" aria-label="Carregando Foxy…">
+  <div class="loader-logo">Foxy 🦊</div>
+  <div class="loader-imgs" aria-hidden="true">
+    <div class="loader-img a"><img src="rapositosgif.gif"></div>
+    <div class="loader-img b">🤝</div>
+  </div>
+  <p class="loader-text"></p>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<!-- NAV -->
+<nav class="nav" role="navigation" aria-label="Navegação principal">
+  <div class="nav-logo" onclick="window.location.href='index.html'" role="link" tabindex="0" aria-label="Foxy — Início">Foxy 🦊</div>
+  <div class="nav-actions">
+    <button class="nav-btn" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    <button class="btn btn-ghost btn-sm" onclick="window.location.href='login.html'">Entrar</button>
+    <button class="btn btn-primary btn-sm" onclick="window.location.href='register.html'">Começar grátis</button>
+  </div>
+</nav>
+
+<main id="main-content" class="page-enter">
+
+  <!-- Hero -->
+  <section class="landing-hero" aria-label="Boas-vindas ao Foxy">
+    <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb-3" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <div class="hero-chip">🌿 Espaço seguro para pessoas autistas</div>
+      <h1 class="hero-title">
+        Conecte-se no seu ritmo<br><span>FOXY</span>.<br/>
+        
+      </h1>
+      <p class="hero-sub">
+        Foxy é a plataforma mais calma e inclusiva para socialização através de mini-games cooperativos.
+      </p>
+      <div class="hero-actions">
+      </div>
+    </div>
+
+    <div class="hero-cards" role="list">
+      <div class="hero-feat-card card-glass" role="listitem">
+        <div class="feat-icon" style="background:var(--blue-pale)">🎨</div>
+        <div class="feat-title">Mini-games Cooperativos</div>
+        <div class="feat-desc">5 jogos de 2 a 5 minutos. Sem competição. Só diversão e criação juntos.</div>
+      </div>
+      <div class="hero-feat-card card-glass" role="listitem">
+        <div class="feat-icon" style="background:var(--purple-pale)">💬</div>
+        <div class="feat-title">Chat Guiado Seguro</div>
+        <div class="feat-desc">Frases prontas, emojis e respostas rápidas. Comunicação sem sobrecarga.</div>
+      </div>
+      <div class="hero-feat-card card-glass" role="listitem">
+        <div class="feat-icon" style="background:var(--green-pale)">🔧</div>
+        <div class="feat-title">Controle Total</div>
+        <div class="feat-desc">Modo silencioso, reduzir animações, alto contraste e mais no seu controle.</div>
+      </div>
+      <div class="hero-feat-card card-glass" role="listitem">
+        <div class="feat-icon" style="background:#FFF3E0">🌱</div>
+        <div class="feat-title">Conquistas Gentis</div>
+        <div class="feat-desc">Medalhas de cooperação. Sem rankings. Só crescimento e celebração.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Como funciona -->
+  <section class="section" id="como-funciona" aria-label="Como o Foxy funciona">
+    <div class="text-center" style="margin-bottom:60px">
+      <h2 class="section-title">Cada detalhe foi pensado para você </h2>
+      <p class="section-sub">Porque inclusão de verdade está em cada pixel</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px">
+      <div class="card">
+        <div style="font-size:2.5rem;margin-bottom:16px"></div>
+        <h3 style="font-family:var(--font-title);font-size:1.15rem;font-weight:700;margin-bottom:10px">Design Sensorial</h3>
+        <p style="color:var(--text2);font-size:0.9rem;line-height:1.6">Paleta calmante, animações suaves, sem elementos piscantes. Modo sensorial ativável com um toque.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:2.5rem;margin-bottom:16px"></div>
+        <h3 style="font-family:var(--font-title);font-size:1.15rem;font-weight:700;margin-bottom:10px">Acessibilidade Total</h3>
+        <p style="color:var(--text2);font-size:0.9rem;line-height:1.6">Compatível com VoiceOver, NVDA e TalkBack. Botões grandes, navegação por teclado e ARIA completo.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:2.5rem;margin-bottom:16px"></div>
+        <h3 style="font-family:var(--font-title);font-size:1.15rem;font-weight:700;margin-bottom:10px">Moderação Ativa</h3>
+        <p style="color:var(--text2);font-size:0.9rem;line-height:1.6">IA detecta sobrecarga e filtra linguagem tóxica. Você sempre está seguro aqui.</p>
+      </div>
+      <div class="card">
+        <div style="font-size:2.5rem;margin-bottom:16px"></div>
+        <h3 style="font-family:var(--font-title);font-size:1.15rem;font-weight:700;margin-bottom:10px">5 Mini-games</h3>
+        <p style="color:var(--text2);font-size:0.9rem;line-height:1.6">Desenho, histórias, quiz, puzzle e emoji. Cada jogo dura entre 2 e 5 minutos. Cooperação pura.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Final -->
+  <section style="background:linear-gradient(135deg,var(--blue-pale),var(--purple-pale));padding:clamp(60px,10vw,120px) clamp(16px,5vw,48px);text-align:center" aria-label="Convite para começar">
+    <h2 class="section-title" style="max-width:600px;margin:0 auto 16px">Pronto para se conectar no seu jeito? 🦊</h2>
+    <p style="color:var(--text2);margin-bottom:36px;font-size:1.05rem">Crie sua conta em menos de 2 minutos. Completamente grátis.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-primary btn-lg" onclick="window.location.href='register.html'">🌟 Criar conta grátis</button>
+      <button class="btn btn-ghost btn-lg" onclick="window.location.href='login.html'">Já tenho conta</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="text-align:center;padding:32px 24px;color:var(--text3);font-size:0.85rem;border-top:1px solid var(--border)">
+    <p>Foxy 🦊 — Feito com 💙 para pessoas autistas</p>
+    <p style="margin-top:8px">
+      <a href="safety.html" style="color:var(--text3);margin:0 12px">Segurança</a>
+      <a href="settings.html" style="color:var(--text3);margin:0 12px">Configurações</a>
+    </p>
+  </footer>
+
+</main>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

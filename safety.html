@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<title>Foxy 🦊 — Segurança</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="safety">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<nav class="nav" role="navigation" aria-label="Navegação principal">
+  <div class="nav-logo" onclick="showPage('dashboard')" role="link" tabindex="0">Foxy 🦊</div>
+  <div class="nav-actions">
+    <button class="nav-btn" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    <button class="nav-btn" onclick="goBack()" aria-label="Voltar">←</button>
+  </div>
+</nav>
+
+<main id="main-content" class="page-enter">
+  <div class="safety-wrap">
+    <h1 class="page-title">🛡️ Central de Segurança</h1>
+    <p class="page-sub">Você está seguro(a) aqui. Sempre. 💙</p>
+
+    <!-- Botão de Emergência -->
+    <div style="background:linear-gradient(135deg,#FCE4EC,#E8F5FF);border:2px solid var(--purple);border-radius:var(--radius-lg);padding:28px;text-align:center;margin-bottom:24px" role="region" aria-label="Ação de emergência">
+      <div style="font-size:2.5rem;margin-bottom:12px">🆘</div>
+      <h2 style="font-family:var(--font-title);font-weight:900;font-size:1.2rem;margin-bottom:8px">Sentiu-se desconfortável?</h2>
+      <p style="color:var(--text2);font-size:0.9rem;margin-bottom:20px">Clique no botão abaixo. Você sai imediatamente e nenhuma explicação é necessária.</p>
+      <button class="btn btn-primary btn-lg" onclick="emergencyExit()" style="background:linear-gradient(135deg,#e74c3c,#c0392b)" aria-label="Sair imediatamente do jogo ou sessão">
+        🚪 Sair agora — sem explicações
+      </button>
+    </div>
+
+    <!-- Regras do Foxy -->
+    <div class="safety-card">
+      <div class="safety-icon" aria-hidden="true">📋</div>
+      <h2 class="safety-title">Regras do Foxy</h2>
+      <ul style="color:var(--text2);font-size:0.9rem;line-height:2;list-style:none;padding:0">
+        <li>✅ Respeito mútuo em todas as interações</li>
+        <li>✅ Sem pressão para continuar qualquer sessão</li>
+        <li>✅ Sem compartilhar informações pessoais reais</li>
+        <li>✅ Linguagem gentil e inclusiva sempre</li>
+        <li>✅ Denuncie comportamentos inadequados</li>
+        <li>❌ Sem mensagens agressivas ou ofensivas</li>
+        <li>❌ Sem pressão para responder rápido</li>
+      </ul>
+    </div>
+
+    <!-- Denunciar -->
+    <div class="safety-card">
+      <div class="safety-icon" aria-hidden="true">🚩</div>
+      <h2 class="safety-title">Denunciar comportamento</h2>
+      <p style="color:var(--text2);font-size:0.9rem;margin-bottom:16px">Se alguém te fez sentir mal, você pode denunciar. Nossa equipe analisa todos os casos.</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button class="btn btn-ghost btn-full" onclick="reportUser('linguagem')" style="justify-content:flex-start">
+          😤 Linguagem inapropriada
+        </button>
+        <button class="btn btn-ghost btn-full" onclick="reportUser('pressao')" style="justify-content:flex-start">
+          😰 Pressão ou intimidação
+        </button>
+        <button class="btn btn-ghost btn-full" onclick="reportUser('outro')" style="justify-content:flex-start">
+          📝 Outro motivo
+        </button>
+      </div>
+    </div>
+
+    <!-- Autoregulação -->
+    <div class="safety-card">
+      <div class="safety-icon" aria-hidden="true">🧘</div>
+      <h2 class="safety-title">Técnicas de autoregulação</h2>
+      <p style="color:var(--text2);font-size:0.88rem;margin-bottom:16px">Se estiver sobrecarregado(a), tente:</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px">
+        <div style="background:var(--blue-pale);border-radius:var(--radius-sm);padding:14px;text-align:center">
+          <div style="font-size:1.5rem;margin-bottom:6px">🫁</div>
+          <div style="font-size:0.82rem;font-weight:700">Respiração 4-7-8</div>
+          <div style="font-size:0.75rem;color:var(--text2);margin-top:4px">Inspire 4s, segure 7s, expire 8s</div>
+        </div>
+        <div style="background:var(--green-pale);border-radius:var(--radius-sm);padding:14px;text-align:center">
+          <div style="font-size:1.5rem;margin-bottom:6px">🌿</div>
+          <div style="font-size:0.82rem;font-weight:700">Regra 5-4-3-2-1</div>
+          <div style="font-size:0.75rem;color:var(--text2);margin-top:4px">5 coisas que vê, 4 que toca…</div>
+        </div>
+        <div style="background:var(--purple-pale);border-radius:var(--radius-sm);padding:14px;text-align:center">
+          <div style="font-size:1.5rem;margin-bottom:6px">🌙</div>
+          <div style="font-size:0.82rem;font-weight:700">Pausa segura</div>
+          <div style="font-size:0.75rem;color:var(--text2);margin-top:4px">Saia e volte quando quiser</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:24px">
+      <button class="btn btn-ghost" onclick="showPage('dashboard')">🏠 Voltar ao início</button>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="app.js"></script>
+<script type="module">
+window.emergencyExit = function() {
+  showToast("Saindo com segurança… Você está seguro(a) 💙", "info");
+  setTimeout(() => window.location.href = "dashboard.html", 600);
+};
+window.reportUser = function(reason) {
+  const msgs = {
+    linguagem: "Denúncia de linguagem enviada. Obrigado por nos avisar 💙",
+    pressao: "Denúncia de pressão enviada. Tomaremos providências 💙",
+    outro: "Denúncia enviada. Nossa equipe analisará em breve 💙",
+  };
+  showToast(msgs[reason] ?? "Denúncia enviada 💙", "success");
+};
+</script>
+</body>
+</html>

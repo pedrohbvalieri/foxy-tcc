@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<title>Foxy 🦊 — Puzzle em Equipe</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.puzzle-board {
+  display: grid;
+  gap: 6px;
+  background: var(--bg3);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin: 0 auto;
+  max-width: 400px;
+}
+.puzzle-slot {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  border: 2px dashed var(--border);
+  display: grid;
+  place-items: center;
+  font-size: 1.8rem;
+  background: var(--bg);
+  transition: var(--trans-spring);
+  position: relative;
+  min-height: 60px;
+}
+.puzzle-slot.drag-over {
+  border-color: var(--blue-deep);
+  background: var(--blue-pale);
+  transform: scale(1.05);
+}
+.puzzle-slot.filled {
+  border-style: solid;
+  border-color: var(--green-deep);
+  background: var(--green-pale);
+}
+.puzzle-pieces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  min-height: 80px;
+}
+.puzzle-piece-drag {
+  font-size: 1.8rem;
+  padding: 12px;
+  background: var(--bg3);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  cursor: grab;
+  user-select: none;
+  transition: var(--trans-spring);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.puzzle-piece-drag:hover {
+  transform: scale(1.1);
+  border-color: var(--blue);
+  background: var(--blue-pale);
+}
+.puzzle-piece-drag.dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+</style>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="puzzle-game">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<nav class="nav" role="navigation" aria-label="Navegação principal">
+  <div class="nav-logo" onclick="showPage('dashboard')" role="link" tabindex="0">Foxy 🦊</div>
+  <div class="nav-actions">
+    <button class="nav-btn" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    <button class="nav-btn" onclick="leaveGame()" aria-label="Sair do jogo">🚪</button>
+    <div class="nav-avatar" onclick="showPage('profile')" role="button" tabindex="0" aria-label="Meu perfil">🦊</div>
+  </div>
+</nav>
+
+<main id="main-content" class="page-enter">
+  <div class="game-wrap">
+
+    <header class="game-header">
+      <div class="game-header-title">🖼️ Puzzle em Equipe</div>
+      <div class="timer-badge" id="timerDisplay" aria-live="polite">4:00</div>
+      <span style="background:#FFF3E0;color:var(--peach-deep);padding:6px 16px;border-radius:99px;font-size:0.82rem;font-weight:700">
+        🧩 <span id="progressText">0/9 peças</span>
+      </span>
+    </header>
+
+    <div class="game-body">
+      <div class="game-main">
+        <h2 style="font-family:var(--font-title);font-weight:800;font-size:1rem;margin-bottom:4px">Monte o puzzle juntos!</h2>
+        <p style="color:var(--text3);font-size:0.82rem;margin-bottom:16px">Arraste as peças para os lugares certos 🖼️</p>
+
+        <!-- Tema do Puzzle -->
+        <div style="background:var(--peach);background:linear-gradient(135deg,#FFF3E0,#FCE4EC);border-radius:var(--radius-sm);padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+          <span style="font-size:1.5rem">🖼️</span>
+          <div>
+            <div style="font-weight:800;font-size:0.88rem">Tema: <span id="puzzleTheme">Floresta Encantada 🌳</span></div>
+            <div style="color:var(--text2);font-size:0.78rem">Monte a cena encantada!</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="newPuzzle()" style="margin-left:auto" aria-label="Novo puzzle">Novo</button>
+        </div>
+
+        <!-- Tabuleiro -->
+        <div class="puzzle-board" id="puzzleBoard" role="grid" aria-label="Tabuleiro do puzzle"></div>
+
+        <!-- Progresso -->
+        <div style="margin-top:12px">
+          <div class="progress-bar" role="progressbar" aria-label="Peças colocadas" aria-valuenow="0" aria-valuemin="0" aria-valuemax="9" id="puzzleProgress">
+            <div class="progress-fill" id="puzzleFill" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- Peças disponíveis -->
+        <div>
+          <p style="font-size:0.82rem;font-weight:700;color:var(--text2);margin-bottom:8px;margin-top:12px">Peças disponíveis (arraste para o puzzle):</p>
+          <div class="puzzle-pieces" id="puzzlePieces" role="group" aria-label="Peças do puzzle"></div>
+        </div>
+
+        <!-- Vitória -->
+        <div id="puzzleWin" style="display:none;text-align:center;padding:28px;background:linear-gradient(135deg,var(--green-pale),var(--blue-pale));border-radius:var(--radius);border:1px solid var(--green)">
+          <div style="font-size:3rem;margin-bottom:12px">🎊</div>
+          <h3 style="font-family:var(--font-title);font-size:1.3rem;font-weight:900;margin-bottom:8px">Puzzle completo!</h3>
+          <p style="color:var(--text2);margin-bottom:16px">Vocês montaram o puzzle juntos! Incrível! 🌟</p>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-secondary" onclick="newPuzzle()">🖼️ Novo puzzle</button>
+            <button class="btn btn-ghost" onclick="showPage('dashboard')">🏠 Início</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat -->
+      <aside class="game-chat" aria-label="Chat do jogo">
+        <div class="chat-header">💬 Chat guiado</div>
+        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
+        <div class="quick-replies" role="group" aria-label="Respostas rápidas">
+          <button class="qr-btn" onclick="sendQuickReply('Essa peça vai aqui! 👆')">👆 Essa vai aqui!</button>
+          <button class="qr-btn" onclick="sendQuickReply('Você tenta essa 🙂')">🙂 Você tenta!</button>
+          <button class="qr-btn" onclick="sendQuickReply('Quase! Tente ao lado 😊')">😊 Quase!</button>
+          <button class="qr-btn" onclick="sendQuickReply('Que time incrível! 🌟')">🌟 Incrível!</button>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-input" type="text" id="chatInput"
+            placeholder="Dê uma dica ao parceiro…"
+            aria-label="Chat"
+            onkeydown="if(event.key==='Enter')sendChatMsg()"/>
+          <button class="btn btn-primary btn-sm" onclick="sendChatMsg()" aria-label="Enviar">→</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="app.js"></script>
+<script type="module">
+const PUZZLES = [
+  {
+    theme: "Floresta Encantada 🌳",
+    pieces: ["🌳","🌲","🌿","🌺","🦋","🍄","🌸","🦊","⭐"],
+    solution: ["🌳","🌲","🌿","🌺","🦋","🍄","🌸","🦊","⭐"]
+  },
+  {
+    theme: "Cidade Colorida 🏙️",
+    pieces: ["🏠","🏢","🌆","🌉","🚌","🌳","⭐","🌙","🌈"],
+    solution: ["🏠","🏢","🌆","🌉","🚌","🌳","⭐","🌙","🌈"]
+  },
+  {
+    theme: "Fundo do Mar 🐠",
+    pieces: ["🐠","🐙","🌊","🐚","🦈","🌿","🐟","⭐","🏖️"],
+    solution: ["🐠","🐙","🌊","🐚","🦈","🌿","🐟","⭐","🏖️"]
+  }
+];
+
+let currentPuzzle = 0;
+let board = [];
+let placed = 0;
+let availablePieces = [];
+let dragPiece = null;
+
+function initPuzzle() {
+  const puzzle = PUZZLES[currentPuzzle];
+  document.getElementById("puzzleTheme").textContent = puzzle.theme;
+  document.getElementById("puzzleWin").style.display = "none";
+  placed = 0;
+  board = new Array(9).fill(null);
+  // Embaralha peças
+  availablePieces = [...puzzle.pieces].sort(() => Math.random() - 0.5);
+  renderBoard();
+  renderPieces();
+  updateProgress();
+}
+
+function renderBoard() {
+  const el = document.getElementById("puzzleBoard");
+  if (!el) return;
+  el.style.gridTemplateColumns = "repeat(3,1fr)";
+  el.innerHTML = board.map((cell, i) => `
+    <div class="puzzle-slot ${cell ? 'filled' : ''}"
+      data-idx="${i}"
+      ondragover="handleDragOver(event)"
+      ondrop="handleDrop(event,${i})"
+      ondragleave="handleDragLeave(event)"
+      role="gridcell"
+      aria-label="Posição ${i+1}${cell ? ': ' + cell : ': vazia'}"
+      onclick="handleSlotClick(${i})">
+      ${cell ?? '<span style="opacity:0.2;font-size:1rem">+</span>'}
+    </div>`).join("");
+}
+
+function renderPieces() {
+  const el = document.getElementById("puzzlePieces");
+  if (!el) return;
+  if (availablePieces.length === 0) {
+    el.innerHTML = '<span style="color:var(--text3);font-size:0.85rem">Todas as peças foram usadas! ✅</span>';
+    return;
+  }
+  el.innerHTML = availablePieces.map((p, i) => `
+    <div class="puzzle-piece-drag"
+      draggable="true"
+      data-piece="${p}"
+      data-pidx="${i}"
+      ondragstart="handleDragStart(event,'${p}',${i})"
+      ondragend="handleDragEnd(event)"
+      onclick="autoPlace('${p}',${i})"
+      role="button"
+      tabindex="0"
+      aria-label="Peça ${p}"
+      onkeydown="if(event.key==='Enter'||event.key===' ')autoPlace('${p}',${i})">
+      ${p}
+    </div>`).join("");
+}
+
+function updateProgress() {
+  const pct = (placed / 9) * 100;
+  const fill = document.getElementById("puzzleFill");
+  if (fill) fill.style.width = pct + "%";
+  const bar = document.getElementById("puzzleProgress");
+  if (bar) bar.setAttribute("aria-valuenow", placed);
+  const txt = document.getElementById("progressText");
+  if (txt) txt.textContent = `${placed}/9 peças`;
+}
+
+window.handleDragStart = function(e, piece, pidx) {
+  dragPiece = { piece, pidx };
+  e.target.classList.add("dragging");
+  e.dataTransfer.effectAllowed = "move";
+};
+window.handleDragEnd = function(e) {
+  e.target.classList.remove("dragging");
+  dragPiece = null;
+};
+window.handleDragOver = function(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add("drag-over");
+};
+window.handleDragLeave = function(e) {
+  e.currentTarget.classList.remove("drag-over");
+};
+window.handleDrop = function(e, slotIdx) {
+  e.preventDefault();
+  e.currentTarget.classList.remove("drag-over");
+  if (!dragPiece) return;
+  placePiece(dragPiece.piece, dragPiece.pidx, slotIdx);
+};
+
+// Click to auto-place
+window.autoPlace = function(piece, pidx) {
+  const emptySlot = board.indexOf(null);
+  if (emptySlot === -1) return;
+  placePiece(piece, pidx, emptySlot);
+};
+
+window.handleSlotClick = function(slotIdx) {
+  if (board[slotIdx]) return; // already filled
+  if (availablePieces.length === 0) return;
+  const pidx = 0;
+  placePiece(availablePieces[0], pidx, slotIdx);
+};
+
+function placePiece(piece, pidx, slotIdx) {
+  if (board[slotIdx] !== null) {
+    showToast("Esse espaço já está preenchido! Tente outro 😊", "info");
+    return;
+  }
+  board[slotIdx] = piece;
+  availablePieces.splice(pidx, 1);
+  placed++;
+  renderBoard();
+  renderPieces();
+  updateProgress();
+
+  const reactions = ["Perfeito! 🌟","Boa posição! ✨","Excelente! 🎉","Muito bem! 🥰","Combinação incrível! 🌈"];
+  addChatMessage("Foxy IA 🦊", reactions[Math.floor(Math.random() * reactions.length)], false);
+
+  if (placed === 9) {
+    setTimeout(() => {
+      showToast("Puzzle completo! Vocês arrasaram! 🎊", "success");
+      document.getElementById("puzzleWin").style.display = "block";
+      addChatMessage("Foxy IA 🦊", "INCRÍVEL! Vocês completaram o puzzle juntos! 🎊🌟", false);
+    }, 400);
+  }
+}
+
+window.newPuzzle = function() {
+  currentPuzzle = (currentPuzzle + 1) % PUZZLES.length;
+  initPuzzle();
+  showToast("Novo puzzle! Vamos lá! 🖼️", "info");
+  addChatMessage("Foxy IA 🦊", `Novo desafio! Tema: ${PUZZLES[currentPuzzle].theme} Monte juntos! 🧩`, false);
+};
+
+initPuzzle();
+
+setTimeout(() => {
+  if (typeof addChatMessage === "function") {
+    addChatMessage("Foxy IA 🦊", "Olá! Vamos montar o puzzle juntos! Arraste ou clique nas peças! 🧩", false);
+  }
+}, 500);
+</script>
+</body>
+</html>

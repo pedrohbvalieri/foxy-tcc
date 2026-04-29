@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<title>Foxy 🦊 — Início</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="dashboard">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+
+<div id="foxy-loader" role="status" aria-label="Carregando…">
+  <div class="loader-logo">Foxy 🦊</div>
+  <div class="loader-imgs" aria-hidden="true">
+    <div class="loader-img a">🌸</div>
+    <div class="loader-img b">🤝</div>
+  </div>
+  <p class="loader-text">Preparando seu espaço seguro… 🌸</p>
+</div>
+
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<nav class="nav" role="navigation" aria-label="Navegação principal">
+  <div class="nav-logo" onclick="window.location.href='dashboard.html'" role="link" tabindex="0">Foxy 🦊</div>
+  <div class="nav-actions">
+    <button class="nav-btn" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    <button class="nav-btn" onclick="showPage('settings')" aria-label="Configurações">⚙️</button>
+    <button class="nav-btn" onclick="showPage('safety')" aria-label="Segurança">🛡️</button>
+    <div class="nav-avatar" onclick="showPage('profile')" role="button" tabindex="0"
+      aria-label="Meu perfil" onkeydown="if(event.key==='Enter')showPage('profile')">🦊</div>
+  </div>
+</nav>
+
+<main id="main-content" class="page-enter">
+  <div class="dash-wrap">
+
+    <!-- Barra de Humor -->
+    <div class="mood-bar" role="region" aria-label="Como você está hoje?">
+      <span class="mood-label">Como você está hoje?</span>
+      <div class="mood-btns" role="group" aria-label="Estado emocional">
+        <button class="mood-btn" onclick="setMood('great')" aria-label="Ótimo">😄 Ótimo</button>
+        <button class="mood-btn" onclick="setMood('good')"  aria-label="Bem">😊 Bem</button>
+        <button class="mood-btn" onclick="setMood('ok')"    aria-label="Ok">😐 Ok</button>
+        <button class="mood-btn" onclick="setMood('tired')" aria-label="Cansado">😴 Cansado</button>
+        <button class="mood-btn" onclick="setMood('quiet')" aria-label="Quieto">🌙 Quieto</button>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <!-- Coluna Principal -->
+      <div>
+        <h1 class="dash-greeting" id="dashGreeting" aria-live="polite">Olá! 🌟</h1>
+
+        <!-- Jogos Rápidos -->
+        <div style="margin-bottom:24px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <h2 style="font-family:var(--font-title);font-weight:800;font-size:1.1rem">🎮 Jogos rápidos</h2>
+            <button class="btn btn-ghost btn-sm" onclick="showPage('games')">Ver todos →</button>
+          </div>
+          <div class="games-grid" id="dashGames" role="list" aria-label="Jogos disponíveis"></div>
+        </div>
+
+        <!-- Conquistas Recentes -->
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <h2 style="font-family:var(--font-title);font-weight:800;font-size:1.1rem">🏆 Suas conquistas</h2>
+            <button class="btn btn-ghost btn-sm" onclick="showPage('achievements')">Ver todas →</button>
+          </div>
+          <div class="achievement-grid" id="achievementsList" role="list" aria-label="Conquistas desbloqueadas"></div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar" aria-label="Informações adicionais">
+        <!-- Amigos -->
+        <div class="widget">
+          <div class="widget-title">💚 Amigos online</div>
+          <div id="friendsList" role="list" aria-label="Amigos online"></div>
+        </div>
+
+        <!-- Progresso -->
+        <div class="widget">
+          <div class="widget-title">🌱 Seu jardim</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="text-align:center">
+              <div style="font-family:var(--font-title);font-size:2rem;font-weight:900;color:var(--blue-deep)" id="statSessions">0</div>
+              <div style="color:var(--text3);font-size:0.75rem">Sessões</div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-family:var(--font-title);font-size:2rem;font-weight:900;color:var(--green-deep)" id="statStreak">1</div>
+              <div style="color:var(--text3);font-size:0.75rem">Dias seguidos</div>
+            </div>
+          </div>
+          <div style="margin-top:16px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;font-size:0.82rem;color:var(--text2)">
+              <span>Progresso do jardim</span>
+              <span>30%</span>
+            </div>
+            <div class="progress-bar" aria-label="30% de progresso" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" role="progressbar">
+              <div class="progress-fill" style="width:30%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Links rápidos -->
+        <div class="widget">
+          <div class="widget-title">🔗 Atalhos</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-ghost btn-full" onclick="showPage('profile')" style="justify-content:flex-start">👤 Meu perfil</button>
+            <button class="btn btn-ghost btn-full" onclick="showPage('achievements')" style="justify-content:flex-start">🏆 Conquistas</button>
+            <button class="btn btn-ghost btn-full" onclick="showPage('settings')" style="justify-content:flex-start">⚙️ Configurações</button>
+            <button class="btn btn-ghost btn-full" onclick="logout()" style="justify-content:flex-start;color:var(--text3)">🚪 Sair</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- Modal de Conforto -->
+<div id="comfortModal" class="modal-overlay" aria-hidden="true" aria-modal="true" role="dialog" aria-labelledby="comfortTitle"
+  onclick="if(event.target===this)closeComfort()">
+  <div class="modal">
+    <h2 class="modal-title" id="comfortTitle">Como quer jogar? 🌸</h2>
+    <p class="modal-sub">Escolha o modo que te deixa mais confortável hoje</p>
+    <div class="comfort-options" role="group" aria-label="Modos de jogo">
+      <button class="comfort-btn" onclick="startGame('partner')" aria-label="Jogar com parceiro real">
+        <div class="comfort-icon">🤝</div>
+        <div class="comfort-info">
+          <strong>Com parceiro real</strong>
+          <span>Conectar com outra pessoa</span>
+        </div>
+      </button>
+      <button class="comfort-btn" onclick="startGame('ai')" aria-label="Jogar com a IA Foxy">
+        <div class="comfort-icon">🦊</div>
+        <div class="comfort-info">
+          <strong>Com a Foxy IA</strong>
+          <span>Praticar sozinho com IA amigável</span>
+        </div>
+      </button>
+      <button class="comfort-btn" onclick="startGame('silent')" aria-label="Jogar no modo quieto">
+        <div class="comfort-icon">🌙</div>
+        <div class="comfort-info">
+          <strong>Modo quieto</strong>
+          <span>Só você, sem pressão</span>
+        </div>
+      </button>
+    </div>
+    <button class="btn btn-ghost btn-full" style="margin-top:16px" onclick="closeComfort()">Cancelar</button>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

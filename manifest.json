@@ -1,0 +1,18 @@
+{
+  "name": "Foxy — Conecte-se no seu ritmo",
+  "short_name": "Foxy",
+  "description": "Plataforma calma e inclusiva para socialização de pessoas autistas através de mini-games cooperativos.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#F8F9FA",
+  "theme_color": "#A5D6FF",
+  "orientation": "portrait-primary",
+  "categories": ["social", "games", "health"],
+  "icons": [
+    { "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='48' fill='%23A5D6FF'/><text x='96' y='130' font-size='100' text-anchor='middle'>🦊</text></svg>", "sizes": "192x192", "type": "image/svg+xml" },
+    { "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='128' fill='%23A5D6FF'/><text x='256' y='360' font-size='280' text-anchor='middle'>🦊</text></svg>", "sizes": "512x512", "type": "image/svg+xml" }
+  ],
+  "screenshots": [],
+  "lang": "pt-BR",
+  "dir": "ltr"
+}

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<title>Foxy 🦊 — Criar conta</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<link rel="stylesheet" href="styles-auth.css"/>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="register">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<div id="foxy-loader" role="status" aria-label="Carregando…">
+  <div class="loader-logo">Foxy 🦊</div>
+  <div class="loader-imgs" aria-hidden="true">
+    <div class="loader-img a">🌸</div>
+    <div class="loader-img b">🌿</div>
+  </div>
+  <p class="loader-text">Preparando seu espaço seguro… 🌸</p>
+</div>
+
+<button class="theme-float" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+
+<main id="main-content" class="auth-page" style="align-items:flex-start;padding-top:clamp(40px,8vw,80px)">
+  <div class="auth-card register-card" role="main">
+
+    <span class="auth-logo">Foxy 🦊</span>
+    <p class="auth-tagline">Crie seu espaço seguro 🌱 É rápido e grátis!</p>
+
+    <!-- Nome -->
+    <div class="form-group">
+      <label class="form-label" for="regName">Como posso te chamar? 😊</label>
+      <input class="input" type="text" id="regName"
+        placeholder="Seu nome ou apelido"
+        autocomplete="nickname" aria-required="true"
+        aria-describedby="regName-error" maxlength="30"/>
+      <p class="field-error" id="regName-error" role="alert"></p>
+    </div>
+
+    <!-- Avatar -->
+    <div class="form-group">
+      <label class="form-label">Escolha seu avatar 🐾</label>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:12px">
+        <div id="avatarPreview" style="font-size:2.5rem;width:56px;height:56px;background:var(--blue-pale);border-radius:50%;display:grid;place-items:center;transition:var(--trans-spring)" aria-live="polite" aria-label="Avatar selecionado">🦊</div>
+        <span style="color:var(--text2);font-size:0.85rem">Toque para escolher →</span>
+      </div>
+      <div class="avatar-grid" id="avatarGrid" role="radiogroup" aria-label="Escolha de avatar"></div>
+    </div>
+
+    <!-- Interesses -->
+    <div class="form-group">
+      <label class="form-label">Seus interesses (até 3) 🌈</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px" id="interestsGrid" role="group" aria-label="Interesses"></div>
+    </div>
+
+    <!-- Conforto Social -->
+    <div class="form-group">
+      <label class="form-label">Nível de conforto social</label>
+      <p style="color:var(--text3);font-size:0.82rem;margin-bottom:12px">Como você se sente ao interagir com outras pessoas?</p>
+      <div class="comfort-level" role="radiogroup" aria-label="Nível de conforto social">
+        <button type="button" id="comfort-low" class="comfort-level-btn active"
+          role="radio" aria-checked="true" onclick="setComfortLevel('low')">
+          <span>🌱</span>Iniciando
+        </button>
+        <button type="button" id="comfort-med" class="comfort-level-btn"
+          role="radio" aria-checked="false" onclick="setComfortLevel('med')">
+          <span>🌿</span>Médio
+        </button>
+        <button type="button" id="comfort-high" class="comfort-level-btn"
+          role="radio" aria-checked="false" onclick="setComfortLevel('high')">
+          <span>🌳</span>Confortável
+        </button>
+      </div>
+    </div>
+
+    <!-- E-mail/Senha opcional -->
+    <div class="form-group">
+      <label class="form-label" for="regEmail">E-mail (opcional)</label>
+      <p style="color:var(--text3);font-size:0.8rem;margin-bottom:8px">Sem e-mail, você entra como visitante temporário.</p>
+      <input class="input" type="email" id="regEmail"
+        placeholder="seu@email.com (opcional)"
+        autocomplete="email"
+        aria-describedby="regEmail-error"/>
+      <p class="field-error" id="regEmail-error" role="alert"></p>
+    </div>
+
+    <div id="passGroup" style="display:none" class="form-group">
+      <label class="form-label" for="regPass">Senha (mínimo 6 caracteres)</label>
+      <input class="input" type="password" id="regPass"
+        placeholder="Criar senha segura"
+        autocomplete="new-password"
+        aria-describedby="regPass-error"/>
+      <p class="field-error" id="regPass-error" role="alert"></p>
+    </div>
+
+    <button class="btn btn-primary btn-full" onclick="completeRegister()" style="margin-top:8px">
+      🌟 Criar meu espaço seguro
+    </button>
+
+    <p class="auth-link">
+      Já tem conta? <a href="login.html">Entrar</a>
+    </p>
+    <p class="auth-link" style="margin-top:8px">
+      <a href="index.html" style="color:var(--text3)">← Voltar ao início</a>
+    </p>
+  </div>
+</main>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

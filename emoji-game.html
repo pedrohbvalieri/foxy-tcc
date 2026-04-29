@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<title>Foxy 🦊 — Adivinhe o Emoji</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.emoji-card {
+  background: linear-gradient(135deg, #FCE4EC, #E8F5FF);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  text-align: center;
+  transition: var(--trans-spring);
+}
+[data-theme="dark"] .emoji-card {
+  background: linear-gradient(135deg, #2D1B2E, #0D2035);
+}
+.emoji-big {
+  font-size: clamp(3.5rem, 10vw, 5.5rem);
+  display: block;
+  animation: emojiBounce 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  margin-bottom: 8px;
+  letter-spacing: 0.15em;
+}
+@keyframes emojiBounce {
+  from { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0); opacity: 1; }
+}
+body.reduce-motion .emoji-big { animation: none; }
+.hint-reveal {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+.hint-char {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  background: var(--bg2);
+  border: 2px solid var(--border);
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  font-weight: 800;
+  transition: var(--trans-spring);
+}
+.hint-char.revealed {
+  border-color: var(--green-deep);
+  background: var(--green-pale);
+  color: var(--green-deep);
+  animation: charPop 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes charPop {
+  from { transform: scale(0.5); }
+  to   { transform: scale(1); }
+}
+.score-badge {
+  background: linear-gradient(135deg,var(--blue-deep),var(--purple-deep));
+  color: #fff;
+  padding: 6px 20px;
+  border-radius: 99px;
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1rem;
+}
+</style>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="emoji-game">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<nav class="nav" role="navigation" aria-label="Navegação principal">
+  <div class="nav-logo" onclick="showPage('dashboard')" role="link" tabindex="0">Foxy 🦊</div>
+  <div class="nav-actions">
+    <button class="nav-btn" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    <button class="nav-btn" onclick="leaveGame()" aria-label="Sair do jogo">🚪</button>
+    <div class="nav-avatar" onclick="showPage('profile')" role="button" tabindex="0" aria-label="Meu perfil">🦊</div>
+  </div>
+</nav>
+
+<main id="main-content" class="page-enter">
+  <div class="game-wrap">
+
+    <header class="game-header">
+      <div class="game-header-title">😄 Adivinhe o Emoji</div>
+      <div class="timer-badge" id="timerDisplay" aria-live="polite">2:00</div>
+      <div class="score-badge">⭐ <span id="scoreDisplay">0</span></div>
+    </header>
+
+    <div class="game-body">
+      <div class="game-main">
+
+        <!-- Card do Emoji -->
+        <div class="emoji-card">
+          <span class="emoji-big" id="emojiDisplay" aria-label="Emojis a adivinhar" role="img">🎬 🦁 👑</span>
+          <p class="emoji-hint" id="emojiHint" aria-live="polite">Dica: Um filme famoso</p>
+
+          <!-- Letras reveladas -->
+          <div class="hint-reveal" id="hintReveal" aria-label="Letras reveladas" aria-live="polite"></div>
+
+          <!-- Dica extra -->
+          <button class="btn btn-ghost btn-sm" onclick="revealHint()" id="hintBtn" style="margin-top:8px" aria-label="Revelar uma letra da resposta">
+            💡 Revelar letra
+          </button>
+        </div>
+
+        <!-- Categoria -->
+        <div style="display:flex;gap:10px;align-items:center;justify-content:center">
+          <span id="categoryBadge" style="background:var(--purple-pale);color:var(--purple-deep);padding:4px 14px;border-radius:99px;font-size:0.8rem;font-weight:700">🎬 Filmes</span>
+          <span style="color:var(--text3);font-size:0.82rem">Pergunta <span id="roundDisplay">1</span> de <span id="totalDisplay">8</span></span>
+        </div>
+
+        <!-- Input de resposta -->
+        <div class="emoji-input-row">
+          <input class="input" type="text" id="emojiAnswer"
+            placeholder="Digite a resposta…"
+            aria-label="Sua resposta"
+            style="flex:1"
+            onkeydown="if(event.key==='Enter')checkEmojiAnswer()"/>
+          <button class="btn btn-primary" onclick="checkEmojiAnswer()" aria-label="Verificar resposta">
+            Verificar ✓
+          </button>
+        </div>
+
+        <!-- Opções de resposta (mobile-friendly) -->
+        <div id="emojiOptions" style="display:none">
+          <p style="font-size:0.82rem;color:var(--text2);margin-bottom:8px;font-weight:700">Ou escolha uma opção:</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="emojiChoices"></div>
+        </div>
+
+        <!-- Pular -->
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <button class="btn btn-ghost btn-sm" onclick="skipEmoji()" aria-label="Pular esse emoji">
+            ⏭️ Pular
+          </button>
+          <div style="color:var(--text3);font-size:0.78rem">
+            Acertos: <strong id="correctCount">0</strong>
+          </div>
+        </div>
+
+        <!-- Tela Final -->
+        <div id="emojiFinal" style="display:none;text-align:center;padding:24px;background:linear-gradient(135deg,var(--purple-pale),var(--blue-pale));border-radius:var(--radius);border:1px solid var(--purple)">
+          <div style="font-size:3rem;margin-bottom:12px">🎊</div>
+          <h3 style="font-family:var(--font-title);font-size:1.3rem;font-weight:900;margin-bottom:8px">Fim do jogo!</h3>
+          <p style="color:var(--text2);margin-bottom:20px">Pontuação final: <strong id="finalEmojiScore">0</strong> pontos! 🌟</p>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="restartEmoji()">🔄 Jogar novamente</button>
+            <button class="btn btn-ghost" onclick="showPage('dashboard')">🏠 Início</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat -->
+      <aside class="game-chat" aria-label="Chat do jogo">
+        <div class="chat-header">💬 Chat guiado</div>
+        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite"></div>
+        <div class="quick-replies" role="group" aria-label="Respostas rápidas">
+          <button class="qr-btn" onclick="sendQuickReply('Hmm, não sei! 🤔')">🤔 Não sei</button>
+          <button class="qr-btn" onclick="sendQuickReply('Você sabe esse? 😄')">😄 Você sabe?</button>
+          <button class="qr-btn" onclick="sendQuickReply('Acertei! 🎉')">🎉 Acertei!</button>
+          <button class="qr-btn" onclick="sendQuickReply('Que difícil! 😅')">😅 Difícil!</button>
+        </div>
+        <div class="chat-input-row">
+          <input class="chat-input" type="text" id="chatInput"
+            placeholder="Dê uma dica ao parceiro…"
+            aria-label="Chat"
+            onkeydown="if(event.key==='Enter')sendChatMsg()"/>
+          <button class="btn btn-primary btn-sm" onclick="sendChatMsg()" aria-label="Enviar">→</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="app.js"></script>
+<script type="module">
+const EMOJI_ROUNDS = [
+  { emojis:"🎬 🦁 👑",  hint:"Um filme famoso da Disney",     answer:"rei leão",      category:"🎬 Filmes",     options:["rei leão","moana","bambi","frozen"]           },
+  { emojis:"❄️ 👸 🏰",  hint:"Princesa e neve mágica",        answer:"frozen",        category:"🎬 Filmes",     options:["frozen","branca de neve","cinderela","bela"]   },
+  { emojis:"🕷️ 🕸️ 👨", hint:"Super-herói favorito dos fãs",  answer:"homem aranha",  category:"🦸 Heróis",     options:["homem aranha","batman","flash","lanterna"]     },
+  { emojis:"🌊 🐟 🐠",  hint:"Animação sobre o oceano",       answer:"nemo",          category:"🎬 Animação",   options:["nemo","dory","tubarão","flipper"]              },
+  { emojis:"🎵 🎤 ⭐",  hint:"Atividade artística com voz",   answer:"cantar",        category:"🎵 Música",     options:["cantar","dançar","tocar","pintar"]             },
+  { emojis:"🌍 🔭 🚀",  hint:"Exploração além da Terra",      answer:"espaço",        category:"🚀 Ciência",    options:["espaço","oceano","vulcão","floresta"]          },
+  { emojis:"🐼 🎋 🇨🇳", hint:"Animal fofo que come bambu",    answer:"panda",         category:"🐾 Animais",    options:["panda","koala","urso","preguiça"]              },
+  { emojis:"🌈 ☔ ☀️",  hint:"Fenômeno após a chuva",         answer:"arco iris",     category:"🌤️ Natureza",  options:["arco iris","trovão","neblina","geada"]         },
+];
+
+let roundIdx = 0;
+let score = 0;
+let correct = 0;
+let hintsUsed = 0;
+let revealedChars = [];
+
+function showRound() {
+  const r = EMOJI_ROUNDS[roundIdx];
+  hintsUsed = 0;
+  revealedChars = [];
+
+  const emojiEl = document.getElementById("emojiDisplay");
+  if (emojiEl) {
+    emojiEl.style.animation = "none";
+    requestAnimationFrame(() => {
+      emojiEl.style.animation = "";
+      emojiEl.textContent = r.emojis;
+    });
+  }
+  const hintEl = document.getElementById("emojiHint");
+  if (hintEl) hintEl.textContent = `💡 ${r.hint}`;
+
+  const catEl = document.getElementById("categoryBadge");
+  if (catEl) catEl.textContent = r.category;
+
+  const rdEl = document.getElementById("roundDisplay");
+  if (rdEl) rdEl.textContent = roundIdx + 1;
+
+  const answerEl = document.getElementById("emojiAnswer");
+  if (answerEl) { answerEl.value = ""; answerEl.focus(); }
+
+  const hintBtn = document.getElementById("hintBtn");
+  if (hintBtn) hintBtn.disabled = false;
+
+  // Render blank chars
+  renderHintChars();
+
+  // Options
+  const optEl = document.getElementById("emojiChoices");
+  if (optEl) {
+    const shuffled = [...r.options].sort(() => Math.random() - 0.5);
+    optEl.innerHTML = shuffled.map(o =>
+      `<button class="quiz-option" onclick="selectOption('${o}')" aria-label="${o}">${o}</button>`
+    ).join("");
+    document.getElementById("emojiOptions").style.display = "block";
+  }
+}
+
+function renderHintChars() {
+  const r = EMOJI_ROUNDS[roundIdx];
+  const el = document.getElementById("hintReveal");
+  if (!el) return;
+  const chars = r.answer.replace(/ /g, "·").split("");
+  el.innerHTML = chars.map((c, i) => {
+    const revealed = c === "·" || revealedChars.includes(i);
+    return `<div class="hint-char ${revealed ? 'revealed' : ''}" aria-label="${revealed ? c : 'letra oculta'}">
+      ${revealed ? c : '?'}
+    </div>`;
+  }).join("");
+}
+
+window.revealHint = function() {
+  const r = EMOJI_ROUNDS[roundIdx];
+  const chars = r.answer.split("");
+  const hidden = chars.map((c, i) => i).filter(i => chars[i] !== " " && !revealedChars.includes(i));
+  if (hidden.length === 0) return;
+  const pick = hidden[Math.floor(Math.random() * hidden.length)];
+  revealedChars.push(pick);
+  hintsUsed++;
+  renderHintChars();
+  if (hintsUsed >= 3) {
+    const btn = document.getElementById("hintBtn");
+    if (btn) { btn.disabled = true; btn.textContent = "💡 Sem mais dicas"; }
+  }
+};
+
+window.selectOption = function(opt) {
+  const answerEl = document.getElementById("emojiAnswer");
+  if (answerEl) { answerEl.value = opt; answerEl.focus(); }
+  checkEmojiAnswer();
+};
+
+window.checkEmojiAnswer = function() {
+  const input = document.getElementById("emojiAnswer");
+  const userAnswer = input?.value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const r = EMOJI_ROUNDS[roundIdx];
+  const correct_ = r.answer.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  if (!userAnswer) return;
+
+  if (userAnswer === correct_ || correct_.includes(userAnswer) || userAnswer.includes(correct_)) {
+    const pts = Math.max(10 - hintsUsed * 2, 5);
+    score += pts;
+    correct++;
+    document.getElementById("scoreDisplay").textContent = score;
+    document.getElementById("correctCount").textContent = correct;
+    showToast(`Correto! +${pts} pontos! 🎉`, "success");
+    addChatMessage("Foxy IA 🦊", `Isso mesmo! "${r.answer}" 🎉 +${pts} pontos!`, false);
+    // Destaca opção certa
+    document.querySelectorAll("#emojiChoices .quiz-option").forEach(btn => {
+      if (btn.textContent.trim().toLowerCase() === r.answer) btn.classList.add("correct");
+      btn.disabled = true;
+    });
+    setTimeout(advanceRound, 1200);
+  } else {
+    showToast("Quase! Tente novamente 💙", "info");
+    if (input) { input.value = ""; input.focus(); }
+    addChatMessage("Foxy IA 🦊", "Hmm, não é essa… tente novamente ou peça uma dica! 💙", false);
+  }
+};
+
+window.skipEmoji = function() {
+  const r = EMOJI_ROUNDS[roundIdx];
+  showToast(`Era "${r.answer}"! Não tem problema 🌸`, "info");
+  addChatMessage("Foxy IA 🦊", `A resposta era "${r.answer}"! 🌸 Vamos para o próximo!`, false);
+  setTimeout(advanceRound, 1000);
+};
+
+function advanceRound() {
+  roundIdx++;
+  if (roundIdx < EMOJI_ROUNDS.length) {
+    showRound();
+    addChatMessage("Foxy IA 🦊", "Próximo emoji! Quem vai adivinhar? 😄", false);
+  } else {
+    showFinal();
+  }
+}
+
+function showFinal() {
+  document.getElementById("emojiFinal").style.display = "block";
+  document.getElementById("finalEmojiScore").textContent = score;
+  showToast(`Jogo concluído! ${score} pontos! 🎊`, "success");
+  addChatMessage("Foxy IA 🦊", `Parabéns! ${score} pontos e ${correct} acertos! Vocês são incríveis! 🌟`, false);
+}
+
+window.restartEmoji = function() {
+  roundIdx = 0; score = 0; correct = 0;
+  document.getElementById("scoreDisplay").textContent = "0";
+  document.getElementById("correctCount").textContent = "0";
+  document.getElementById("emojiFinal").style.display = "none";
+  showRound();
+};
+
+document.getElementById("totalDisplay").textContent = EMOJI_ROUNDS.length;
+showRound();
+
+setTimeout(() => {
+  if (typeof addChatMessage === "function") {
+    addChatMessage("Foxy IA 🦊", "Olá! Vamos adivinhar os emojis juntos! Você pode digitar ou escolher uma opção! 😄", false);
+  }
+}, 500);
+</script>
+</body>
+</html>

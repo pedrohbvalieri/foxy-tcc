@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#A5D6FF"/>
+<title>Foxy 🦊 — Como Funciona</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+</head>
+<body data-page="landing">
+<div class="aurora-fallback" aria-hidden="true"></div>
+
+<a href="#main-content" class="skip-link">Pular para conteúdo principal</a>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<nav class="nav" role="navigation" aria-label="Navegação principal">
+  <div class="nav-logo" onclick="window.location.href='index.html'" role="link" tabindex="0">Foxy 🦊</div>
+  <div class="nav-actions">
+    <button class="nav-btn" data-theme-btn onclick="toggleTheme()" aria-label="Alternar tema">🌙</button>
+    <button class="nav-btn" onclick="goBack()" aria-label="Voltar">←</button>
+    <button class="btn btn-primary btn-sm" onclick="window.location.href='register.html'">Começar grátis</button>
+  </div>
+</nav>
+
+<main id="main-content" class="page-enter">
+  <div class="section" style="padding-top:60px;max-width:800px">
+
+    <h1 class="section-title text-center">Como o Foxy funciona? 🦊</h1>
+    <p class="section-sub text-center" style="margin-bottom:60px">Uma jornada calma e segura, do início ao fim</p>
+
+    <!-- Passos -->
+    <div style="display:flex;flex-direction:column;gap:32px">
+
+      <div style="display:flex;gap:20px;align-items:flex-start">
+        <div style="width:56px;height:56px;border-radius:50%;background:var(--blue-pale);display:grid;place-items:center;font-size:1.5rem;flex-shrink:0;border:2px solid var(--blue)">1</div>
+        <div>
+          <h2 style="font-family:var(--font-title);font-weight:800;font-size:1.1rem;margin-bottom:8px">Crie seu perfil 🌱</h2>
+          <p style="color:var(--text2);font-size:0.9rem;line-height:1.7">Escolha um avatar animal, seus interesses e nível de conforto social. Tudo anônimo — sem nome real, sem foto, sem pressão. Só e-mail (opcional) e um apelido carinhoso.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:20px;align-items:flex-start">
+        <div style="width:56px;height:56px;border-radius:50%;background:var(--green-pale);display:grid;place-items:center;font-size:1.5rem;flex-shrink:0;border:2px solid var(--green)">2</div>
+        <div>
+          <h2 style="font-family:var(--font-title);font-weight:800;font-size:1.1rem;margin-bottom:8px">Escolha um mini-game 🎮</h2>
+          <p style="color:var(--text2);font-size:0.9rem;line-height:1.7">5 jogos cooperativos de 2 a 5 minutos: desenho, história, quiz, puzzle e emoji. Todos sem competição — só cooperação, criatividade e diversão.</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:20px;align-items:flex-start">
+        <div style="width:56px;height:56px;border-radius:50%;background:var(--purple-pale);display:grid;place-items:center;font-size:1.5rem;flex-shrink:0;border:2px solid var(--purple)">3</div>
+        <div>
+          <h2 style="font-family:var(--font-title);font-weight:800;font-size:1.1rem;margin-bottom:8px">Escolha como jogar 🌸</h2>
+          <p style="color:var(--text2);font-size:0.9rem;line-height:1.7">Com parceiro real (pessoa com interesses parecidos), com a IA Foxy (praticar sozinho sem pressão) ou modo quieto (completamente solo, sem chat).</p>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:20px;align-items:flex-start">
+        <div style="width:56px;height:56px;border-radius:50%;background:#FFF3E0;display:grid;place-items:center;font-size:1.5rem;flex-shrink:0;border:2px solid var(--peach)">4</div>
+        <div>
+          <h2 style="font-family:var(--font-title);font-weight:800;font-size:1.1rem;margin-bottom:8px">Jogue e celebre 🎉</h2>
+          <p style="color:var(--text2);font-size:0.9rem;line-height:1.7">O chat guiado tem frases prontas, emojis e respostas rápidas — sem necessidade de inventar palavras. Ao final, receba conquistas gentis celebrando sua participação!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Jogos -->
+    <div style="margin-top:60px">
+      <h2 class="section-title text-center" style="font-size:1.5rem;margin-bottom:32px">Os 5 Mini-games 🎮</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+        <div class="card" style="text-align:center">
+          <div style="font-size:2rem;margin-bottom:8px">🎨</div>
+          <div style="font-family:var(--font-title);font-weight:800;margin-bottom:6px">Desenho Colaborativo</div>
+          <div style="color:var(--text2);font-size:0.82rem">5 min · Tela compartilhada</div>
+        </div>
+        <div class="card" style="text-align:center">
+          <div style="font-size:2rem;margin-bottom:8px">📖</div>
+          <div style="font-family:var(--font-title);font-weight:800;margin-bottom:6px">História Coletiva</div>
+          <div style="color:var(--text2);font-size:0.82rem">3 min · Escrita cooperativa</div>
+        </div>
+        <div class="card" style="text-align:center">
+          <div style="font-size:2rem;margin-bottom:8px">🧩</div>
+          <div style="font-family:var(--font-title);font-weight:800;margin-bottom:6px">Quiz Cooperativo</div>
+          <div style="color:var(--text2);font-size:0.82rem">3 min · 8 perguntas juntos</div>
+        </div>
+        <div class="card" style="text-align:center">
+          <div style="font-size:2rem;margin-bottom:8px">🖼️</div>
+          <div style="font-family:var(--font-title);font-weight:800;margin-bottom:6px">Puzzle em Equipe</div>
+          <div style="color:var(--text2);font-size:0.82rem">4 min · Montem juntos</div>
+        </div>
+        <div class="card" style="text-align:center">
+          <div style="font-size:2rem;margin-bottom:8px">😄</div>
+          <div style="font-family:var(--font-title);font-weight:800;margin-bottom:6px">Adivinhe o Emoji</div>
+          <div style="color:var(--text2);font-size:0.82rem">2 min · Cooperação divertida</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:48px;padding:40px;background:linear-gradient(135deg,var(--blue-pale),var(--purple-pale));border-radius:var(--radius-lg)">
+      <h2 style="font-family:var(--font-title);font-size:1.4rem;font-weight:900;margin-bottom:12px">Pronto para começar? 🦊</h2>
+      <p style="color:var(--text2);margin-bottom:24px">Completamente grátis. Sem anúncios. Só conexão.</p>
+      <button class="btn btn-primary btn-lg" onclick="window.location.href='register.html'">🌟 Criar conta grátis</button>
+    </div>
+  </div>
+</main>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
