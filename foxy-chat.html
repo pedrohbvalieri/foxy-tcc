@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#9739cd"/>
+<title>Foxy 🦊 — Conversar</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<script>/* foxy-theme-init */ (function(){var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var fs=localStorage.getItem("fontSize");if(fs)document.documentElement.style.fontSize=fs+"px";})()</script>
+<style>
+/* ── Layout geral do chat ───────────────────────────────────────── */
+html, body { height: 100%; overflow: hidden; }
+body { display: flex; flex-direction: column; }
+.chat-wrapper { display: flex; flex-direction: column; flex: 1; height: 100dvh; overflow: hidden; }
+
+/* Área de mensagens */
+.chat-history {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scroll-behavior: smooth;
+}
+
+/* Bolhas */
+.msg-row { display: flex; flex-direction: column; }
+.msg-row.foxy { align-items: flex-start; }
+.msg-row.user { align-items: flex-end; }
+
+.msg-name {
+  font-size: 0.72rem;
+  font-weight: 700;
+  opacity: 0.6;
+  margin-bottom: 3px;
+  padding: 0 4px;
+}
+
+.msg-bubble {
+  max-width: min(78%, 420px);
+  padding: 11px 16px;
+  border-radius: 18px;
+  line-height: 1.55;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+.msg-row.foxy .msg-bubble {
+  background: var(--purple-pale);
+  color: var(--purple-deep);
+  border-bottom-left-radius: 4px;
+}
+.msg-row.user .msg-bubble {
+  background: var(--blue-pale);
+  color: var(--blue-deep);
+  border-bottom-right-radius: 4px;
+}
+[data-theme="dark"] .msg-row.foxy .msg-bubble { background: #2D1B3E; color: #D4A8FF; }
+[data-theme="dark"] .msg-row.user .msg-bubble  { background: #0D2035; color: #90C4F9; }
+
+/* Typing indicator */
+.typing-dots { display: flex; gap: 5px; padding: 4px 0; align-items: center; }
+.typing-dots span {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--purple-deep);
+  animation: typingBounce 1.2s infinite ease-in-out;
+  opacity: 0.5;
+}
+[data-theme="dark"] .typing-dots span { background: #D4A8FF; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30%            { transform: translateY(-6px); opacity: 1; }
+}
+
+/* Respostas rápidas */
+.quick-bar {
+  padding: 8px 12px 4px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  overflow-x: auto;
+  border-top: 1px solid var(--border);
+}
+.qr-btn {
+  font-size: 0.8rem;
+  padding: 6px 13px;
+  border-radius: 20px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: background 0.15s, transform 0.1s;
+  color: var(--text);
+}
+.qr-btn:hover  { background: var(--purple-pale); }
+.qr-btn:active { transform: scale(0.96); }
+
+/* Barra de input */
+.chat-bar {
+  padding: 10px 12px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  background: var(--bg);
+}
+.chat-textarea {
+  flex: 1;
+  border-radius: 20px;
+  padding: 10px 16px;
+  resize: none;
+  min-height: 42px;
+  max-height: 110px;
+  overflow-y: auto;
+  font-family: inherit;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text);
+  outline: none;
+  line-height: 1.4;
+  transition: border-color 0.2s;
+}
+.chat-textarea:focus { border-color: var(--purple-deep); }
+
+/* Cabeçalho do chat */
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+.chat-header-avatar { font-size: 2rem; line-height: 1; }
+.chat-header-info .name  { font-weight: 800; font-size: 1rem; color: var(--purple-deep); }
+.chat-header-info .status { font-size: 0.75rem; color: var(--text-2); }
+.status-dot {
+  display: inline-block; width: 7px; height: 7px;
+  border-radius: 50%; background: #4CAF50; margin-right: 4px;
+}
+</style>
+</head>
+<body data-page="foxy-chat">
+<div class="aurora-fallback" aria-hidden="true"></div>
+<div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+<div class="chat-wrapper">
+  <!-- Cabeçalho -->
+  <header class="chat-header">
+    <button class="btn btn-ghost btn-sm" onclick="history.back()" aria-label="Voltar" style="min-height:36px;padding:0 10px">←</button>
+    <div class="chat-header-avatar">🦊</div>
+    <div class="chat-header-info">
+      <div class="name">Foxy</div>
+      <div class="status"><span class="status-dot"></span>Online agora</div>
+    </div>
+  </header>
+
+  <!-- Histórico de mensagens -->
+  <div class="chat-history" id="chatHistory" role="log" aria-live="polite" aria-label="Conversa com a Foxy"></div>
+
+  <!-- Respostas rápidas -->
+  <div class="quick-bar" id="quickBar" role="group" aria-label="Respostas rápidas">
+    <button class="qr-btn" onclick="sendQuick('Oi Foxy! 👋')">Oi Foxy! 👋</button>
+    <button class="qr-btn" onclick="sendQuick('Estou feliz hoje! 😊')">Feliz hoje 😊</button>
+    <button class="qr-btn" onclick="sendQuick('Estou meio cansado...')">Cansado 😴</button>
+    <button class="qr-btn" onclick="sendQuick('Quero falar sobre meus interesses!')">Meus interesses 🌟</button>
+    <button class="qr-btn" onclick="sendQuick('Quero jogar um jogo!')">Jogar 🎮</button>
+    <button class="qr-btn" onclick="sendQuick('Preciso de uma pausa 🌙')">Pausa 🌙</button>
+    <button class="qr-btn" onclick="sendQuick('Como você está, Foxy?')">Como você está?</button>
+  </div>
+
+  <!-- Barra de input -->
+  <div class="chat-bar">
+    <textarea
+      class="chat-textarea"
+      id="chatInput"
+      placeholder="Escreva para a Foxy…"
+      rows="1"
+      aria-label="Escrever mensagem"
+      onkeydown="handleKey(event)"
+      oninput="autoResize(this)">
+    </textarea>
+    <button class="btn btn-primary btn-sm" onclick="sendMsg()" aria-label="Enviar mensagem" style="min-height:42px;padding:0 18px;border-radius:20px">→</button>
+  </div>
+</div>
+
+<script type="module" src="app.js"></script>
+<script type="module">
+import { foxyAsk, setChildProfile, loadBehaviorHistory, saveBehaviorToFirestore } from "./foxy-ai.js";
+import { auth, db } from "./firebase-config.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+let history = [];   // histórico da conversa para a API
+let userId   = null;
+let isSending = false;
+
+// ── Carrega perfil e inicializa ─────────────────────────────────────────────
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { window.location.href = "login.html"; return; }
+  userId = user.uid;
+
+  const snap = await getDoc(doc(db, "users", user.uid)).catch(() => null);
+  if (snap?.exists()) {
+    const d = snap.data();
+    setChildProfile({
+      name:         d.displayName || "amigo",
+      avatar:       d.avatar ? ({"raposa":"🦊","gato":"🐱","urso":"🐻","panda":"🐼","coelho":"🐰","pinguim":"🐧","sapo":"🐸","lobo":"🐺","hamster":"🐹","leao":"🦁","elefante":"🐘","tartaruga":"🐢"}[d.avatar] || "🦊") : "🦊",
+      interests:    d.interests || [],
+      comfortLevel: d.comfort   || "low",
+      sessionCount: d.sessionCount || 0,
+    });
+    loadBehaviorHistory(d.behaviorNotes || []);
+  }
+
+  await foxyGreet();
+});
+
+async function foxyGreet() {
+  showTyping();
+  try {
+    const reply = await foxyAsk({
+      context: "chat",
+      messages: [{ role: "user", content: "Olá! Me dê as boas-vindas de um jeito carinhoso e pergunte como estou me sentindo hoje." }],
+    });
+    hideTyping();
+    appendMsg("foxy", reply);
+    history.push({ role: "assistant", content: reply });
+  } catch(e) {
+    hideTyping();
+    appendMsg("foxy", "Oi! Que bom te ver por aqui! Como você está hoje? 🦊");
+  }
+}
+
+// ── Enviar mensagem ──────────────────────────────────────────────────────────
+window.sendMsg = async function() {
+  if (isSending) return;
+  const input = document.getElementById("chatInput");
+  const text  = input.value.trim();
+  if (!text) return;
+
+  isSending = true;
+  input.value = "";
+  input.style.height = "auto";
+  appendMsg("user", text);
+  history.push({ role: "user", content: text });
+
+  showTyping();
+  try {
+    const reply = await foxyAsk({
+      context: "chat",
+      messages: history,
+    });
+    hideTyping();
+    appendMsg("foxy", reply);
+    history.push({ role: "assistant", content: reply });
+
+    // Compacta o histórico
+    if (history.length > 24) history = history.slice(-24);
+
+    // Salva aprendizado
+    saveBehaviorToFirestore(userId);
+  } catch(e) {
+    hideTyping();
+    appendMsg("foxy", "Ops! Tive um pequeno problema. Pode repetir? 🦊");
+    console.error("[Foxy IA]", e);
+  }
+  isSending = false;
+};
+
+window.sendQuick = function(text) {
+  const input = document.getElementById("chatInput");
+  input.value = text;
+  sendMsg();
+};
+
+// ── UI helpers ───────────────────────────────────────────────────────────────
+function appendMsg(who, text) {
+  const log = document.getElementById("chatHistory");
+  const row = document.createElement("div");
+  row.className = `msg-row ${who}`;
+
+  if (who === "foxy") {
+    const name = document.createElement("div");
+    name.className = "msg-name";
+    name.textContent = "🦊 Foxy";
+    row.appendChild(name);
+  }
+
+  const bubble = document.createElement("div");
+  bubble.className = "msg-bubble";
+  bubble.textContent = text;
+  row.appendChild(bubble);
+  log.appendChild(row);
+  log.scrollTop = log.scrollHeight;
+}
+
+let typingRow = null;
+function showTyping() {
+  if (typingRow) return;
+  const log = document.getElementById("chatHistory");
+  typingRow = document.createElement("div");
+  typingRow.className = "msg-row foxy";
+  const name = document.createElement("div");
+  name.className = "msg-name";
+  name.textContent = "🦊 Foxy";
+  const bubble = document.createElement("div");
+  bubble.className = "msg-bubble";
+  bubble.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div>`;
+  typingRow.appendChild(name);
+  typingRow.appendChild(bubble);
+  log.appendChild(typingRow);
+  log.scrollTop = log.scrollHeight;
+}
+function hideTyping() {
+  typingRow?.remove();
+  typingRow = null;
+}
+
+window.handleKey = function(e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMsg();
+  }
+};
+
+window.autoResize = function(el) {
+  el.style.height = "auto";
+  el.style.height = Math.min(el.scrollHeight, 110) + "px";
+};
+
+// Salva ao fechar
+window.addEventListener("beforeunload", () => saveBehaviorToFirestore(userId));
+</script>
+</body>
+</html>
